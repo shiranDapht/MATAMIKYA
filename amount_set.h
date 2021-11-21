@@ -20,7 +20,7 @@
  *   asCopy             - Copies an existing set
  *   asGetSize          - Returns the size of the set
  *   asContains         - Checks if an element exists in the set
- *   asGetAmount         - Returns the amount of an element in the set
+ *   asGetAmount        - Returns the amount of an element in the set
  *   asRegister         - Add a new element into the set
  *   asChangeAmount     - Increase or decrease the amount of an element in the set
  *   asDelete           - Delete an element completely from the set

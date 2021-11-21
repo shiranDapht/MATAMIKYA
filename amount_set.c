@@ -1,30 +1,12 @@
 #include "amount_set.h"
+#include "asNode.h"
 #include <stdlib.h>
 
-#define NULL_POINTER -1
+#define ERROR_SIZE_FUNCTION -1
 
-typedef struct asNode_t *asNode;
 
-// Node struct
-struct asNode_t{
-    ASElement data;
-    double amount;
-    asNode next;
-};
 
-// Node destroyer
-void asNodeDelete(AmountSet set, asNode node){
-    if(!set || !node){
-        return;
-    }
-    set->freeElement(node->data);
-    free(node);
-};
 
-void addNode(asNode node ,ASElement element){
-    node->amount = 0;
-    node->data = element;
-};
 
 // AmountSet implementation
 struct AmountSet_t{
@@ -35,14 +17,26 @@ struct AmountSet_t{
     asNode current;
 };
 
+// Must be in this file because only this file has access to AmountSet
+void asNodeDelete(AmountSet set, asNode node){
+    if(!set || !node){
+        return;
+    }
+    set->freeElement(node->data);
+    free(node);
+};
+
+
 // Return first real element (after dummy)
 ASElement asGetFirst(AmountSet set){
-    return set->head->next;   
+    set->current = set->head->next;
+    return set->current;   
 };
 
 // Return next element of current for iteration
 ASElement asGetNext(AmountSet set){
-    return set->current->next;
+    set->current = set->current->next; // Advance one step
+    return set->current;
 };
 
 // Constructor for AmountSet
@@ -82,6 +76,8 @@ AmountSetResult asClear(AmountSet set){
     if(!set){
         return AS_NULL_ARGUMENT;
     }
+    
+    return AS_SUCCESS;
 
     asNode curr = set->head->next;
 
@@ -108,7 +104,7 @@ bool asContains(AmountSet set, ASElement element){
         return false;
     }
 
-    if(compareElementLoop(set, element) != NULL){
+    if(findElement(set, element) != NULL){
         return true;
     }
 
@@ -139,22 +135,26 @@ AmountSetResult asDelete(AmountSet set, ASElement element){
     return AS_SUCCESS;
 };
 
-//use only if argument are not null
-asNode compareElementLoop(AmountSet set, ASElement element){
+// returns the node containing the element, NULL in other case
+asNode findElement(AmountSet set, ASElement element){
+    if(!set || !element){
+        return NULL;
+    }
     AS_FOREACH(asNode, it, set){
         if(set->compareElements(it->data, element)){
             return it;
         }
     }
+    return NULL;
 };
 
 int asGetSize(AmountSet set){
     if(!set){
-        return NULL_POINTER;
+        return ERROR_SIZE_FUNCTION;
     }
 
     int size = 0;
-
+    /*
     asNode currentNode = set->head->next;
 
     while (currentNode)
@@ -162,7 +162,10 @@ int asGetSize(AmountSet set){
         size++;
         currentNode = currentNode->next;
     }
-    
+    */
+   AS_FOREACH(asNode,it,set){
+       size++;
+   }
     return size;
 };
 
@@ -175,7 +178,7 @@ AmountSetResult asGetAmount(AmountSet set, ASElement element, double *outAmount)
         return AS_ITEM_DOES_NOT_EXIST;
     }
 
-    asNode node = compareElementLoop(set, element);
+    asNode node = findElement(set, element);
     *outAmount = node->amount;
 
     return AS_SUCCESS;
@@ -190,6 +193,21 @@ AmountSetResult asRegister(AmountSet set, ASElement element){
         return AS_ITEM_ALREADY_EXISTS;
     }
 
+    AS_FOREACH(asNode,it,set){
+        //it->next == NULL means that it is end of the list
+        if(it->next == NULL || set->compareElements(it->next->data,element) < 0){
+            asNode biggerNode = it->next;
+            asNode node = malloc(sizeof(asNode));
+            if(!node){
+                return AS_OUT_OF_MEMORY;
+            }
+            asNodeCreate(node,element);
+            node->next = biggerNode;
+            it->next = node;
+            return AS_SUCCESS;
+        }
+    }
+/*
     asNode currentNode = set->head->next;
     asNode previousNode = set->head;
 
@@ -197,9 +215,9 @@ AmountSetResult asRegister(AmountSet set, ASElement element){
         if(set->compareElements(currentNode,element) < 0){
             asNode node = malloc(sizeof(node));
             if(!node){
-                //Ask Adam
+                return AS_OUT_OF_MEMORY;
             }
-            addNode(node ,element))
+            asNodeCreate(node ,element);
             previousNode->next = node;
             node->next = currentNode;
 
@@ -212,13 +230,13 @@ AmountSetResult asRegister(AmountSet set, ASElement element){
 
     asNode node = malloc(sizeof(node));
     if(!node){
-        //Ask Adam
+        return AS_OUT_OF_MEMORY;
     }
-    addNode(node ,element);
+    asNodeCreate(node ,element);
     currentNode->next = node;
 
     return AS_SUCCESS;
-
+*/
 };
 
 AmountSetResult asChangeAmount(AmountSet set, ASElement element, const double amount){
@@ -230,7 +248,7 @@ AmountSetResult asChangeAmount(AmountSet set, ASElement element, const double am
             return AS_ITEM_DOES_NOT_EXIST;
         }
 
-        asNode node = compareElementLoop(set, element);
+        asNode node = findElement(set, element);
         
         double val = node->amount + amount;
         if(val < 0 ){

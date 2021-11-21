@@ -1,23 +1,46 @@
 #include "amount_set.h"
-#include "asNode.h"
 #include <stdlib.h>
 
 #define ERROR_SIZE_FUNCTION -1
 
 
-asNode findElement(AmountSet set, ASElement element);
 
 
-// AmountSet implementation
-struct AmountSet_t{
-    CopyASElement copyElement;
-    FreeASElement freeElement;
-    CompareASElements compareElements;
-    asNode head;
-    asNode current;
+typedef struct asNode_t* asNode;
+/**
+ * @brief 
+ *  struct for node in AmountSet linked node list
+ */
+struct asNode_t{
+    ASElement data;
+    double amount;
+    asNode next;
 };
 
-// Must be in this file because only this file has access to AmountSet
+
+/**
+ * @brief 
+ * Constructor for asNode
+ * @param node 
+ * @param element 
+ */
+void asNodeCreate(asNode node ,ASElement element){
+    if(!node || !element){
+        return;
+    }
+    node->next = NULL;
+    node->amount = 0;
+    node->data = element;
+    return;
+};
+
+
+/**
+ * @brief 
+ * asNode destructor
+ * @param set 
+ * @param node 
+ */
 void asNodeDelete(AmountSet set, asNode node){
     if(!set || !node){
         return;
@@ -27,19 +50,48 @@ void asNodeDelete(AmountSet set, asNode node){
 };
 
 
-// Return first real element (after dummy)
+/**
+ * @brief 
+ * find and return node with identical element
+ * @param set 
+ * @param element 
+ * @return asNode 
+ */
+asNode findElement(AmountSet set, ASElement element){
+    if(!set || !element){
+        return NULL;
+    }
+    AS_FOREACH(asNode, it, set){
+        if(!set->compareElements(it->data, element)){
+            return it;
+        }
+    }
+    return NULL;
+};
+
+
+struct AmountSet_t{
+    CopyASElement copyElement;
+    FreeASElement freeElement;
+    CompareASElements compareElements;
+    asNode head;
+    asNode current;
+};
+
+
+
 ASElement asGetFirst(AmountSet set){
     set->current = set->head->next;
     return set->current;   
 };
 
-// Return next element of current for iteration
+
 ASElement asGetNext(AmountSet set){
     set->current = set->current->next; // Advance one step
     return set->current;
 };
 
-// Constructor for AmountSet
+
 AmountSet asCreate(CopyASElement copyElement, FreeASElement freeElement,
                         CompareASElements compareElements){
                             if (!copyElement || !freeElement || !compareElements){
@@ -71,7 +123,8 @@ AmountSet asCreate(CopyASElement copyElement, FreeASElement freeElement,
                             return set;
                         };
 
-// Free all nodes of set except the dummy
+
+
 AmountSetResult asClear(AmountSet set){
     if(!set){
         return AS_NULL_ARGUMENT;
@@ -90,7 +143,7 @@ AmountSetResult asClear(AmountSet set){
     return AS_SUCCESS;
 };
 
-// Destructor of AmountSet
+
 void asDestroy(AmountSet set){
     if(!set || asClear(set) != AS_SUCCESS){
         return;
@@ -98,6 +151,7 @@ void asDestroy(AmountSet set){
     set->freeElement(set->head);
     free(set->head);
 };
+
 
 bool asContains(AmountSet set, ASElement element){
     if(!set || !element){
@@ -110,6 +164,7 @@ bool asContains(AmountSet set, ASElement element){
 
     return false;
 };
+
 
 AmountSetResult asDelete(AmountSet set, ASElement element){
     if(!set || !element){
@@ -133,19 +188,6 @@ AmountSetResult asDelete(AmountSet set, ASElement element){
         currentNode = currentNode->next;
     }
     return AS_SUCCESS;
-};
-
-// returns the node containing the element, NULL in other case
-asNode findElement(AmountSet set, ASElement element){
-    if(!set || !element){
-        return NULL;
-    }
-    AS_FOREACH(asNode, it, set){
-        if(set->compareElements(it->data, element)){
-            return it;
-        }
-    }
-    return NULL;
 };
 
 int asGetSize(AmountSet set){
@@ -262,8 +304,7 @@ AmountSetResult asChangeAmount(AmountSet set, ASElement element, const double am
 };
 
 AmountSet asCopy(AmountSet set){
-    AmountSet copy = malloc(sizeof(copy));
-    asCreate(set->copyElement,set->freeElement,set->compareElements);
+    AmountSet copy = asCreate(set->copyElement,set->freeElement,set->compareElements);
 
     AS_FOREACH(asNode,it,set){
         copy->current->next = malloc(sizeof(copy->current->next));

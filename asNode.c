@@ -4,10 +4,11 @@
 
 
 // asNode constructor, returns pointer to new asNode, NULL if node or element is NULL.
-asNode asNodeCreate(asNode node ,ASElement element){
+void asNodeCreate(asNode node ,ASElement element){
     if(!node || !element){
         return NULL;
     }
+    node->next = NULL;
     node->amount = 0;
     node->data = element;
     return node;

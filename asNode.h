@@ -9,5 +9,6 @@ struct asNode_t{
     asNode next;
 };
 
-asNode asNodeCreate(asNode node ,ASElement element);
+void asNodeCreate(asNode node ,ASElement element);
+
 #endif /* ASNODE_H_ */

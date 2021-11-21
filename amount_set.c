@@ -5,7 +5,7 @@
 #define ERROR_SIZE_FUNCTION -1
 
 
-
+asNode findElement(AmountSet set, ASElement element);
 
 
 // AmountSet implementation
@@ -104,7 +104,7 @@ bool asContains(AmountSet set, ASElement element){
         return false;
     }
 
-    if(findElement(set, element) != NULL){
+    if(!findElement(set, element)){
         return true;
     }
 
@@ -240,6 +240,7 @@ AmountSetResult asRegister(AmountSet set, ASElement element){
 };
 
 AmountSetResult asChangeAmount(AmountSet set, ASElement element, const double amount){
+
     if(!set || !element || !amount){
             return AS_NULL_ARGUMENT;
         }
@@ -259,3 +260,16 @@ AmountSetResult asChangeAmount(AmountSet set, ASElement element, const double am
 
         return AS_SUCCESS;
 };
+
+AmountSet asCopy(AmountSet set){
+    AmountSet copy = malloc(sizeof(copy));
+    asCreate(set->copyElement,set->freeElement,set->compareElements);
+
+    AS_FOREACH(asNode,it,set){
+        copy->current->next = malloc(sizeof(copy->current->next));
+        asNodeCreate(copy->current->next,it->data);
+        asGetNext(copy);
+    }
+
+    return copy;
+}

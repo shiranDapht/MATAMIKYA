@@ -1,5 +1,4 @@
 #include "amount_set.h"
-#include "asNode.h"
 #include <stdlib.h>
 
 #define ERROR_SIZE_FUNCTION -1

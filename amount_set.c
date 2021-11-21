@@ -5,7 +5,7 @@
 #define ERROR_SIZE_FUNCTION -1
 
 
-
+asNode findElement(AmountSet set, ASElement element);
 
 
 // AmountSet implementation
@@ -104,7 +104,7 @@ bool asContains(AmountSet set, ASElement element){
         return false;
     }
 
-    if(findElement(set, element) != NULL){
+    if(!findElement(set, element)){
         return true;
     }
 

@@ -291,22 +291,22 @@ AmountSetResult asChangeAmount(AmountSet set, ASElement element, const double am
 
     if(!set || !element || !amount){
             return AS_NULL_ARGUMENT;
-        }
+    }
 
-        if(asContains(set,element) == false){
-            return AS_ITEM_DOES_NOT_EXIST;
-        }
+    if(asContains(set,element) == false){
+        return AS_ITEM_DOES_NOT_EXIST;
+    }
 
-        asNode node = findElement(set, element);
-        
-        double val = node->amount + amount;
-        if(val < 0 ){
-            return AS_INSUFFICIENT_AMOUNT;
-        }
+    asNode node = findElement(set, element);
+    
+    double val = node->amount + amount;
+    if(val < 0 ){
+        return AS_INSUFFICIENT_AMOUNT;
+    }
 
-        node->amount += amount;
+    node->amount += amount;
 
-        return AS_SUCCESS;
+    return AS_SUCCESS;
 };
 
 AmountSet asCopy(AmountSet set){

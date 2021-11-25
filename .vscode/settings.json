@@ -1,6 +1,9 @@
 {
     "C_Cpp.errorSquiggles": "Enabled",
     "files.associations": {
-        "tuple": "c"
+        "tuple": "c",
+        "array": "c",
+        "string": "c",
+        "string_view": "c"
     }
 }

@@ -14,6 +14,11 @@ void PrintAllElements(AmountSet set, FILE* file){
 
 void TEST_asRegister(AmountSet set, FILE* file){
     set = asCopy(set);
+    fprintf(file,"asRegister:\n");
+
+    fprintf(file,"  NULL check:\n");
+    fprintf(file,"      Returned value: %d\n",asRegister(NULL,set->current->data));
+    fprintf(file,"      Returned value: %d\n",asRegister(set,NULL));
 
     char** elements[5];
     char* regular_str = "First Element";
@@ -27,12 +32,16 @@ void TEST_asRegister(AmountSet set, FILE* file){
     char* duplicate = "123456789 10 11 12 99 $@#$@!%(*akjsdakjnbsd%%asdlkasd\n\w\"\j\a      \  ' \' \\\\ ";
     elements[4] = duplicate;
 
-    fprintf(file,"asRegister:\n");
     fprintf(file,"    Elements meant to be in set:\n");
-
+    AmountSetResult values[5];
     for(int i = 0; sizeof(elements)/sizeof(ASElement); i++){
-        asRegister(set,elements[i]);
+        values[i] = asRegister(set,elements[i]);
         fprintf(file,"      %s\n",elements[i]);
+    }
+
+    fprintf(file,"  Calling asRegister for every element:\n");
+    for(int i = 0; i < 5; i++){
+        fprintf(file,"      Returned value: %d\n",values[i]);
     }
 
     PrintAllElements(set,file);
@@ -42,12 +51,18 @@ void TEST_asRegister(AmountSet set, FILE* file){
 
 void TEST_asChangeAmount(AmountSet set, FILE* file){
     set = asCopy(set);
+    fprintf(file,"asChangeAmount:\n");
+    fprintf(file,"  NULL check:\n");
+    fprintf(file,"      Returned value: %d\n",asChangeAmount(NULL,set->current->data,1));
+    fprintf(file,"      Returned value: %d\n",asChangeAmount(set,NULL,1));
+
 
     srand(time(NULL));
     AS_FOREACH(asNode,i,set){
-        asChangeAmount(set,i->data,( (double)rand()/RAND_MAX*2000-1000) ); // changes amount by a random number in [-1000,1000]
+        AmountSetResult result = asChangeAmount(set,i->data,( (double)rand()/RAND_MAX*2000-1000) ); // changes amount by a random number in [-1000,1000]
+        fprintf(file, "Returned value: %d\n",result);
     }
-    fprintf(file,"asChangeAmount:\n");
+
     AS_FOREACH(asNode,i,set){
         fprintf(file,"  Element: %s   Amount: %f",i->data,i->amount);
     }
@@ -60,23 +75,27 @@ void TEST_asDelete(AmountSet set, FILE* file){
 
     fprintf(file,"asDelete:\n");
     PrintAllElements(set,file);
+
+    fprintf(file,"  NULL check:\n");
+    fprintf(file,"      returned value: %d\n",asDelete(set,NULL));
+    fprintf(file,"      returned value: %d\n",asDelete(NULL,set->current->data));
     
-    fprintf(file,"  Removing first element\n");
-    asDelete(set,asGetFirst(set));
+    fprintf(file,"  Removing first element, returned value: %d\n",asDelete(set,asGetFirst(set)));
     PrintAllElements(set,file);
     
-    fprintf(file,"  Removing last element\n");
+    
     AS_FOREACH(asNode,i,set){
         if(i->next == NULL){
-            asDelete(set,i->data);
+            fprintf(file,"  Removing last element, returned value: %d\n",asDelete(set,i->data));
         }
     }
     PrintAllElements(set,file);
     
     fprintf(file,"  Removing all elements\n");
     AS_FOREACH(asNode,i,set){
-        asDelete(set,i->data);
+        fprintf(file, "returned value: %d",asDelete(set,i->data));
     }
+    fprintf(file, "\n");
     PrintAllElements(set,file);
 
     asDestroy(set);
@@ -85,10 +104,11 @@ void TEST_asDelete(AmountSet set, FILE* file){
 void TEST_asClear(AmountSet set, FILE* file){
     set = asCopy(set);
 
+    fprintf(file,"  NULL check: %d\n", asClear(NULL));
     fprintf(file,"asClear:\n");
     fprintf(file,"  Before asClear:\n");
     PrintAllElements(set,file);
-    asClear(set);
+    fprintf(file,"  Returned value: \n",asClear(set));
     fprintf(file,"  After asClear:\n");
     PrintAllElements(set,file);
 
@@ -99,6 +119,8 @@ void TEST_asGetFirst(AmountSet set, FILE* file){
     set = asCopy(set);
 
     fprintf(file,"asGetFirst:\n");
+
+    fprintf(file, "     NULL check\n       %s", asGetFirst(NULL));
     PrintAllElements(set,file);
     fprintf(file, "     From asGetFirst\n       %s", asGetFirst(set));
     asDelete(set,asGetFirst(set));
@@ -110,5 +132,5 @@ void TEST_asGetFirst(AmountSet set, FILE* file){
 }
 
 void TEST_asGetNext(AmountSet set, FILE* file){
-    
+
 }

@@ -3,8 +3,19 @@
 #include "adam_amount_set_str_tests.h"
 #include <time.h>
 
+
+void PrintAllElements(AmountSet set, FILE* file){
+    fprintf(file,"  All elements: \n");
+    AS_FOREACH(asNode,i,set){
+        fprintf(file,"      %s\n",i->data);
+    }
+}
+
+
 void TEST_asRegister(AmountSet set, FILE* file){
-    ASElement elements[5];
+    set = asCopy(set);
+
+    char** elements[5];
     char* regular_str = "First Element";
     elements[0] = regular_str;
     char* empty_str = "";
@@ -24,14 +35,14 @@ void TEST_asRegister(AmountSet set, FILE* file){
         fprintf(file,"      %s\n",elements[i]);
     }
 
-    
-    fprintf(file,"    Elements in set:\n");
-    AS_FOREACH(asNode,i,set){
-        fprintf(file,"      %s\n",i->data);
-    }
+    PrintAllElements(set,file);
+
+    asDestroy(set);
 }
 
 void TEST_asChangeAmount(AmountSet set, FILE* file){
+    set = asCopy(set);
+
     srand(time(NULL));
     AS_FOREACH(asNode,i,set){
         asChangeAmount(set,i->data,( (double)rand()/RAND_MAX*2000-1000) ); // changes amount by a random number in [-1000,1000]
@@ -40,56 +51,64 @@ void TEST_asChangeAmount(AmountSet set, FILE* file){
     AS_FOREACH(asNode,i,set){
         fprintf(file,"  Element: %s   Amount: %f",i->data,i->amount);
     }
+
+    asDestroy(set);
 }
 
 void TEST_asDelete(AmountSet set, FILE* file){
+    set = asCopy(set);
+
     fprintf(file,"asDelete:\n");
-    fprintf(file,"  All elements: \n");
-    AS_FOREACH(asNode,i,set){
-        fprintf(file,"      %s\n",i->data);
-    }
+    PrintAllElements(set,file);
+    
     fprintf(file,"  Removing first element\n");
     asDelete(set,asGetFirst(set));
-    fprintf(file,"  All elements: \n");
-    AS_FOREACH(asNode,i,set){
-        fprintf(file,"      %s\n",i->data);
-    }
+    PrintAllElements(set,file);
+    
     fprintf(file,"  Removing last element\n");
     AS_FOREACH(asNode,i,set){
         if(i->next == NULL){
             asDelete(set,i->data);
         }
     }
-    fprintf(file,"  All elements: \n");
-    AS_FOREACH(asNode,i,set){
-        fprintf(file,"      %s\n",i->data);
-    }
+    PrintAllElements(set,file);
+    
     fprintf(file,"  Removing all elements\n");
     AS_FOREACH(asNode,i,set){
         asDelete(set,i->data);
     }
-    fprintf(file,"  All elements: \n");
-    AS_FOREACH(asNode,i,set){
-        fprintf(file,"      %s\n",i->data);
-    }
+    PrintAllElements(set,file);
 
+    asDestroy(set);
 }
 
 void TEST_asClear(AmountSet set, FILE* file){
+    set = asCopy(set);
+
     fprintf(file,"asClear:\n");
     fprintf(file,"  Before asClear:\n");
-    fprintf(file,"  All elements: \n");
-    AS_FOREACH(asNode,i,set){
-        fprintf(file,"      %s\n",i->data);
-    }
+    PrintAllElements(set,file);
     asClear(set);
     fprintf(file,"  After asClear:\n");
-    fprintf(file,"  All elements: \n");
-    AS_FOREACH(asNode,i,set){
-        fprintf(file,"      %s\n",i->data);
-    }
+    PrintAllElements(set,file);
+
+    asDestroy(set);
 }
 
-void TEST_asGetFirst(AmountSet set, FILE* file);
+void TEST_asGetFirst(AmountSet set, FILE* file){
+    set = asCopy(set);
 
-void TEST_asGetNext(AmountSet set, FILE* file);
+    fprintf(file,"asGetFirst:\n");
+    PrintAllElements(set,file);
+    fprintf(file, "     From asGetFirst\n       %s", asGetFirst(set));
+    asDelete(set,asGetFirst(set));
+    fprintf(file, "     From asGetFirst after asDelete(set,asGetFirst(set))\n       %s", asGetFirst(set));
+    asClear(set);
+    fprintf(file, "     From asGetFirst after asClear(set,asGetFirst(set))\n       %s", asGetFirst(set));
+
+    asDestroy(set);
+}
+
+void TEST_asGetNext(AmountSet set, FILE* file){
+    
+}

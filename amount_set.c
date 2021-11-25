@@ -81,12 +81,18 @@ struct AmountSet_t{
 
 
 ASElement asGetFirst(AmountSet set){
+    if(!set){
+        return NULL;
+    }
     set->current = set->head->next;
     return set->current;   
 };
 
 
 ASElement asGetNext(AmountSet set){
+    if(!set){
+        return NULL;
+    }
     set->current = set->current->next; // Advance one step
     return set->current;
 };

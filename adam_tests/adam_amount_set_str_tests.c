@@ -13,8 +13,8 @@ AmountSetResult TEST_asRegister(AmountSet set, FILE* file){
     elements[2] = null_str;
     char* all_chars = "123456789 10 11 12 99 $@#$@!%(*akjsdakjnbsd%%asdlkasd\n\w\"\j\a      \  ' \' \\\\ ";
     elements[3] = all_chars;
-    char* whitespaces = "\n   \n\n \n     \n \n      \n     \n";
-    elements[4] = null_str;
+    char* duplicate = "123456789 10 11 12 99 $@#$@!%(*akjsdakjnbsd%%asdlkasd\n\w\"\j\a      \  ' \' \\\\ ";
+    elements[4] = duplicate;
 
     fprintf(file,"asRegister:\n");
     fprintf(file,"    Elements meant to be in set:\n");
@@ -34,7 +34,7 @@ AmountSetResult TEST_asRegister(AmountSet set, FILE* file){
 AmountSetResult TEST_asChangeAmount(AmountSet set, const double amount, FILE* file){
     srand(time(NULL));
     AS_FOREACH(asNode,i,set){
-        asChangeAmount(set,i->data,( (double)rand()/RAND_MAX*2-1) ); // changes amount by a random number in [-1,1]
+        asChangeAmount(set,i->data,( (double)rand()/RAND_MAX*2000-1000) ); // changes amount by a random number in [-1000,1000]
     }
     fprintf(file,"asChangeAmount:\n");
     AS_FOREACH(asNode,i,set){
@@ -42,7 +42,38 @@ AmountSetResult TEST_asChangeAmount(AmountSet set, const double amount, FILE* fi
     }
 }
 
-AmountSetResult TEST_asDelete(AmountSet set, ASElement element);
+AmountSetResult TEST_asDelete(AmountSet set, FILE* file){
+    fprintf(file,"asDelete:\n");
+    fprintf(file,"  All elements: \n");
+    AS_FOREACH(asNode,i,set){
+        fprintf(file,"      %s\n",i->data);
+    }
+    fprintf(file,"  Removing first element\n");
+    asDelete(set,asGetFirst(set));
+    fprintf(file,"  All elements: \n");
+    AS_FOREACH(asNode,i,set){
+        fprintf(file,"      %s\n",i->data);
+    }
+    fprintf(file,"  Removing last element\n");
+    AS_FOREACH(asNode,i,set){
+        if(i->next == NULL){
+            asDelete(set,i->data);
+        }
+    }
+    fprintf(file,"  All elements: \n");
+    AS_FOREACH(asNode,i,set){
+        fprintf(file,"      %s\n",i->data);
+    }
+    fprintf(file,"  Removing all elements\n");
+    AS_FOREACH(asNode,i,set){
+        asDelete(set,i->data);
+    }
+    fprintf(file,"  All elements: \n");
+    AS_FOREACH(asNode,i,set){
+        fprintf(file,"      %s\n",i->data);
+    }
+
+}
 
 AmountSetResult TEST_asClear(AmountSet set);
 

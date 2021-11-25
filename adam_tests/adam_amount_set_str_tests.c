@@ -3,7 +3,7 @@
 #include "adam_amount_set_str_tests.h"
 #include <time.h>
 
-AmountSetResult TEST_asRegister(AmountSet set, FILE* file){
+void TEST_asRegister(AmountSet set, FILE* file){
     ASElement elements[5];
     char* regular_str = "First Element";
     elements[0] = regular_str;
@@ -31,7 +31,7 @@ AmountSetResult TEST_asRegister(AmountSet set, FILE* file){
     }
 }
 
-AmountSetResult TEST_asChangeAmount(AmountSet set, const double amount, FILE* file){
+void TEST_asChangeAmount(AmountSet set, FILE* file){
     srand(time(NULL));
     AS_FOREACH(asNode,i,set){
         asChangeAmount(set,i->data,( (double)rand()/RAND_MAX*2000-1000) ); // changes amount by a random number in [-1000,1000]
@@ -42,7 +42,7 @@ AmountSetResult TEST_asChangeAmount(AmountSet set, const double amount, FILE* fi
     }
 }
 
-AmountSetResult TEST_asDelete(AmountSet set, FILE* file){
+void TEST_asDelete(AmountSet set, FILE* file){
     fprintf(file,"asDelete:\n");
     fprintf(file,"  All elements: \n");
     AS_FOREACH(asNode,i,set){
@@ -75,8 +75,21 @@ AmountSetResult TEST_asDelete(AmountSet set, FILE* file){
 
 }
 
-AmountSetResult TEST_asClear(AmountSet set);
+void TEST_asClear(AmountSet set, FILE* file){
+    fprintf(file,"asClear:\n");
+    fprintf(file,"  Before asClear:\n");
+    fprintf(file,"  All elements: \n");
+    AS_FOREACH(asNode,i,set){
+        fprintf(file,"      %s\n",i->data);
+    }
+    asClear(set);
+    fprintf(file,"  After asClear:\n");
+    fprintf(file,"  All elements: \n");
+    AS_FOREACH(asNode,i,set){
+        fprintf(file,"      %s\n",i->data);
+    }
+}
 
-ASElement TEST_asGetFirst(AmountSet set);
+void TEST_asGetFirst(AmountSet set, FILE* file);
 
-ASElement TEST_asGetNext(AmountSet set);
+void TEST_asGetNext(AmountSet set, FILE* file);

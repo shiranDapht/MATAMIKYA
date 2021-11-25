@@ -132,5 +132,27 @@ void TEST_asGetFirst(AmountSet set, FILE* file){
 }
 
 void TEST_asGetNext(AmountSet set, FILE* file){
+    set = asCopy(set);
 
+    fprintf(file,"asGetNext:\n");
+    fprintf(file, "     NULL check\n       %s", asGetNext(NULL));
+
+    AS_FOREACH(asNode,i,set){
+
+    }
+
+    fprintf(file, " Returned value after AS_FOREACH: %s", asGetNext(set));
+
+    fprintf(file,"  Initializing with asGetFirst()");
+    asGetFirst(set); //init asGetNext
+
+    PrintAllElements(set,file);
+    fprintf(file, "     From asGetNext\n       %s", asGetFirst(set));
+    asDelete(set,asGetNext(set));
+    fprintf(file, "     From asGetNext after asDelete(set,asGetNext(set))\n       %s", asGetNext(set));
+    asClear(set);
+    fprintf(file, "     From asGetNext after asClear(set,asGetNext(set))\n       %s", asGetNext(set));
+
+
+    asDestroy(set);
 }

@@ -28,10 +28,16 @@ char* CopyASElement(char* str){
 }
 
 char* asGetFirst(AmountSet set){
+    if(!set){
+        return NULL;
+    }
     set->current = set->head->next;
     return set->current;
 }
 char* asGetNext(AmountSet set){
+    if(!set){
+        return NULL;
+    }
     set->current = set->current->next; // Advance one step
     return set->current;
 }

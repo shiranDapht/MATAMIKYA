@@ -24,7 +24,8 @@
         {
             "name": "wsl",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "/usr/include"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",

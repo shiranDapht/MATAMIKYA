@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "adam_amount_set_str_tests.h"
-#include <time.h>
+#include "../amount_set_str.c"
+#include "../shiran_tasts/shiran_amount_set_str_test.h"
 
 
 void PrintAllElements(AmountSet set, FILE* file){
@@ -12,7 +12,7 @@ void PrintAllElements(AmountSet set, FILE* file){
 }
 
 
-void TEST_asRegister(AmountSet set, FILE* file){
+TestRes TEST_asRegister(AmountSet set, FILE* file){
     set = asCopy(set);
     fprintf(file,"asRegister:\n");
 
@@ -21,16 +21,9 @@ void TEST_asRegister(AmountSet set, FILE* file){
     fprintf(file,"      Returned value: %d\n",asRegister(set,NULL));
 
     char** elements[5];
-    char* regular_str = "First Element";
-    elements[0] = regular_str;
-    char* empty_str = "";
-    elements[1] = empty_str;
-    char* null_str = NULL;
-    elements[2] = null_str;
-    char* all_chars = "123456789 10 11 12 99 $@#$@!%(*akjsdakjnbsd%%asdlkasd\n\w\"\j\a      \  ' \' \\\\ ";
-    elements[3] = all_chars;
-    char* duplicate = "123456789 10 11 12 99 $@#$@!%(*akjsdakjnbsd%%asdlkasd\n\w\"\j\a      \  ' \' \\\\ ";
-    elements[4] = duplicate;
+    for(int i = 0; i< 5; i++){
+        scanf("%s", elements[i]);
+    }
 
     fprintf(file,"    Elements meant to be in set:\n");
     AmountSetResult values[5];
@@ -49,7 +42,7 @@ void TEST_asRegister(AmountSet set, FILE* file){
     asDestroy(set);
 }
 
-void TEST_asChangeAmount(AmountSet set, FILE* file){
+TestRes TEST_asChangeAmount(AmountSet set, FILE* file){
     set = asCopy(set);
     fprintf(file,"asChangeAmount:\n");
     fprintf(file,"  NULL check:\n");
@@ -57,9 +50,10 @@ void TEST_asChangeAmount(AmountSet set, FILE* file){
     fprintf(file,"      Returned value: %d\n",asChangeAmount(set,NULL,1));
 
 
-    srand(time(NULL));
+    double input;
+    scanf("%f", input);
     AS_FOREACH(asNode,i,set){
-        AmountSetResult result = asChangeAmount(set,i->data,( (double)rand()/RAND_MAX*2000-1000) ); // changes amount by a random number in [-1000,1000]
+        AmountSetResult result = asChangeAmount(set,i->data, input);
         fprintf(file, "Returned value: %d\n",result);
     }
 
@@ -70,7 +64,7 @@ void TEST_asChangeAmount(AmountSet set, FILE* file){
     asDestroy(set);
 }
 
-void TEST_asDelete(AmountSet set, FILE* file){
+TestRes TEST_asDelete(AmountSet set, FILE* file){
     set = asCopy(set);
 
     fprintf(file,"asDelete:\n");
@@ -101,7 +95,7 @@ void TEST_asDelete(AmountSet set, FILE* file){
     asDestroy(set);
 }
 
-void TEST_asClear(AmountSet set, FILE* file){
+TestRes TEST_asClear(AmountSet set, FILE* file){
     set = asCopy(set);
 
     fprintf(file,"  NULL check: %d\n", asClear(NULL));
@@ -115,7 +109,7 @@ void TEST_asClear(AmountSet set, FILE* file){
     asDestroy(set);
 }
 
-void TEST_asGetFirst(AmountSet set, FILE* file){
+TestRes TEST_asGetFirst(AmountSet set, FILE* file){
     set = asCopy(set);
 
     fprintf(file,"asGetFirst:\n");
@@ -131,7 +125,7 @@ void TEST_asGetFirst(AmountSet set, FILE* file){
     asDestroy(set);
 }
 
-void TEST_asGetNext(AmountSet set, FILE* file){
+TestRes TEST_asGetNext(AmountSet set, FILE* file){
     set = asCopy(set);
 
     fprintf(file,"asGetNext:\n");

@@ -113,6 +113,9 @@ char* asGetFirst(AmountSet set){
         return NULL;
     }
     set->current = set->head->next;
+    if(!set->current){
+        return NULL;
+    }
     return set->current->data;   
 };
 

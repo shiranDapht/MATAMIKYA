@@ -9,19 +9,19 @@ typedef enum TestRes_t{
     TEST_FAILED,
 } TestRes;
 
-TestRes TestAmountSet (FILE* file);
-TestRes TestAsDestroy(AmountSet set, FILE* file);
-TestRes TestAsCopy(AmountSet set, FILE* file);
-TestRes TestAsGetSize(AmountSet set, FILE* file);
-TestRes TestAsContains(AmountSet set,FILE* fileA , FILE* fileB);
-TestRes TestAsGetAmount(AmountSet set, FILE* fileA , FILE* fileB);
+TestRes TestAmountSet();
+TestRes TestAsDestroy(AmountSet set);
+TestRes TestAsCopy(AmountSet set);
+TestRes TestAsGetSize(AmountSet set);
+TestRes TestAsContains(AmountSet set, const char* element);
+TestRes TestAsGetAmount(AmountSet set, const char* element, double* outAmount);
 
-TestRes TEST_asRegister(AmountSet set, FILE* file);
-TestRes TEST_asChangeAmount(AmountSet set, FILE* file);
-TestRes TEST_asDelete(AmountSet set, FILE* file);
-TestRes TEST_asClear(AmountSet set, FILE* file);
-TestRes TEST_asGetFirst(AmountSet set, FILE* file);
-TestRes TEST_asGetNext(AmountSet set, FILE* file);
+TestRes TestAsRegister(AmountSet set, const char* element);
+TestRes TestAChangeAmount(AmountSet set, const char* element, double amount);
+TestRes TestAsDelete(AmountSet set, const char* element);
+TestRes TestAsClear(AmountSet set);
+TestRes TestAsGetFirst(AmountSet set);
+TestRes TestAsGetNext(AmountSet set);
 
 
 

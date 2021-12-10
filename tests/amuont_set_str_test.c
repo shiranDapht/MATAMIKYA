@@ -35,7 +35,6 @@ TestRes TestAsGetSize(AmountSet set){
     int size = asGetSize(set);
     if(size == -1){
         printf("TestAsCopy_Failed\n");
-        printf("Set was NULL\n");
         return TEST_FAILED;
     }
     printf("%d\n",size);
@@ -70,7 +69,7 @@ TestRes TestAsGetAmount(AmountSet set, const char* element, double* outAmount){
             return TEST_FAILED;
         }
         else{
-            printf("TestAsGetAmount_Success\n");
+            printf("-1\n");
             return TEST_SUCCESS;
         }
     }
@@ -79,7 +78,7 @@ TestRes TestAsGetAmount(AmountSet set, const char* element, double* outAmount){
         printf("TestAsGetAmount_Failed\n");
         return TEST_FAILED;
     }
-    printf("TestAsGetAmount_Success\n");
+    printf("%d\n",*outAmount);
     return TEST_SUCCESS;
     
 }
@@ -116,7 +115,9 @@ TestRes TestAsRegister(AmountSet set, const char* element){
     return TEST_SUCCESS;
 }
 
-TestRes TestAChangeAmount(AmountSet set, const char* element, double amount){
+TestRes TestAsChangeAmount(AmountSet set, const char* element, double amount){
+    double previusValue;
+    asGetAmount(set,element,&previusValue);
     AmountSetResult result = asChangeAmount(set,element,amount);
     if(!set || !element){
         if(result != AS_NULL_ARGUMENT){
@@ -144,7 +145,7 @@ TestRes TestAChangeAmount(AmountSet set, const char* element, double amount){
         printf("TestAsChangeAmount_Failed\n");
         return TEST_FAILED;
     }
-    printf("%s\n",findElement(set,element)->amount == amount ? "true" : "false");
+    printf("%s\n",findElement(set,element)->amount == amount + previusValue ? "true\n" : "TestAsChangeAmount_Failed\n");
     return TEST_SUCCESS;
 }
 
@@ -180,6 +181,34 @@ AmountSetResult result = asDelete(set,element);
     return TEST_SUCCESS;
 }
 
+TestRes TestAsGetFirst(AmountSet set){
+    char* first = asGetFirst(set);
+    if(!set && first){
+        printf("TestAsGetFIrst_Failed\n");
+        return TEST_FAILED;
+    }
+    printf("%s\n", first);
+    return TEST_SUCCESS;}
+
+TestRes TestAsGetNext(AmountSet set){
+    if(!set || !set->current){
+        AmountSet copy = asCopy(set);
+        if(asGetNext(copy)){
+            asDestroy(copy);
+            free(copy);
+            printf("TestAsGetNext_Failed\n");
+            return TEST_FAILED;
+        }
+    }
+    char* result = asGetNext(set);
+    if(!set->current && result){
+        printf("TestAsGetNext_Failed\n");
+        return TEST_FAILED;
+    }
+    printf("%s\n",!result ? "NULL" : result);
+    return TEST_SUCCESS;
+}
+
 TestRes TestAsClear(AmountSet set){
     AmountSetResult result = asClear(set);
     if(!set){
@@ -200,29 +229,107 @@ TestRes TestAsClear(AmountSet set){
     return TEST_SUCCESS;
 }
 
-TestRes TestAsGetFirst(AmountSet set){
-    if(!set && asGetFirst(set)){
-        printf("TestAsGetFIrst_Failed\n");
-        return TEST_FAILED;
+TestRes TestAsDestroy(AmountSet set){
+    asDestroy(set);
+    if(set){
+      printf("TestAsDestroy_Failed\n");
+      return TEST_FAILED;
     }
-    printf("TestAsGetFIrst_Success\n");
-    return TEST_SUCCESS;}
+    printf("TestAsDestroy_Success\n");
+    return TEST_SUCCESS;
+}
 
-TestRes TestAsGetNext(AmountSet set){
-    if(!set || !set->current){
-        AmountSet copy = asCopy(set);
-        if(asGetNext(copy)){
-            asDestroy(copy);
-            free(copy);
-            printf("TestAsGetNext_Failed\n");
-            return TEST_FAILED;
+int main(){
+    //Geting array of sets
+    AmountSet arr[5];
+    for(int i=0;i<5;i++){
+        arr[i] = asCreate();
+        int sizeOfSet;
+        scanf("%d", &sizeOfSet);
+        for (int i = 0; i < sizeOfSet; i++)
+        {
+            char* str;
+            double amount;
+            scanf("%s %f",str, &amount);
+            asRegister(arr[i],str);
+            asChangeAmount(arr[i],str,amount);
+        }        
+    }
+
+    //Testing asCreate
+    TestAmountSet();
+    //Testing asCopy
+    for (int i = 0; i < 5; i++){
+        TestAsCopy(arr[i]);
+    }
+    
+    //Testing asGetSize
+    for (int i = 0; i < 5; i++){
+        TestAsGetSize(arr[i]);
+    }
+
+    //Testing asContains
+    for (int i = 0; i < 5; i++){
+        char* str;
+        scanf("%s",str);
+        TestAsContains(arr[i],str);
+    }
+
+    //Testing asGetAmount
+    for (int i = 0; i < 5; i++){
+        int outAmount;
+        char* str;
+        scanf("%s",str);
+        TestAsGetAmount(arr[i],str,&outAmount);
+    }
+
+    //Testing asRegister
+    for (int i = 0; i < 5; i++){
+        char* str;
+        scanf("%s",str);
+        TestAsRegister(arr[i],str);
+        AS_FOREACH(char*,it,arr[i]){
+            printf("%s\n",it);
+        }
+        
+    }
+
+    //Testing asChangeAmount
+    for (int i = 0; i < 5; i++){
+        double amount;
+        char* str;
+        scanf("%s %f",str,&amount);
+        TestAsChangeAmount(arr[i],str,amount);
+    }
+
+    //Testing asDelete
+    for (int i = 0; i < 5; i++){
+        char* str;
+        scanf("%s",str);
+        TestAsDelete(arr[i],str);
+        AS_FOREACH(char*,it,arr[i]){
+            printf("%s\n",it);
         }
     }
-    ASElement result = asGetNext(set);
-    if(!set->current && result){
-        printf("TestAsGetNext_Failed\n");
-        return TEST_FAILED;
+
+    //Tesintg asGetFirst
+    for (int i = 0; i < 5; i++){
+        TestAsGetFirst(arr[i]);
     }
-    printf("TestAsGetNext_Success\n");
-    return TEST_SUCCESS;
+    
+    //Testing asGetNext
+    for (int i = 0; i < 5; i++){
+        TestAsGetNext(arr[i]);
+    }
+
+    //Testing asClear
+    for (int i = 0; i < 5; i++){
+        TestAsClear(arr[i]);
+    }
+
+    //Testing asDestroy
+    for (int i = 0; i < 5; i++){
+        TestAsDestroy(arr[i]);
+    }
+
 }

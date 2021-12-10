@@ -106,9 +106,6 @@ void FreeStr(ASElement str){
     free(str);
 }
 
-
-
-
 ASElement asGetFirst(AmountSet set){
     if(!set){
         return NULL;

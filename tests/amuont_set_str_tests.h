@@ -7,7 +7,7 @@
 typedef enum TestRes_t{
     TEST_SUCCESS,
     TEST_FAILED,
-} TestRes;
+}TestRes;
 
 TestRes TestAmountSet();
 TestRes TestAsDestroy(AmountSet set);

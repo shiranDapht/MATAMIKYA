@@ -6,6 +6,9 @@ TestRes TestAmountSet(){
     for(int i = 0; i<100; i++){
         arr[i] = asCreate();
         if(!arr[i]){
+            for(int j=0;j<i;j++){
+                asDestroy(arr[j]);
+            }
             printf("TestAmountSet_Failed\n");
             return TEST_FAILED;
         }
@@ -63,7 +66,7 @@ TestRes TestAsGetAmount(AmountSet set, const char* element, double* outAmount){
             return TEST_SUCCESS;
         }
     }
-    if(asContains == false){
+    if(!asContains(set,element)){
         if(result != AS_ITEM_DOES_NOT_EXIST){
             printf("TestAsGetAmount_Failed\n");
             return TEST_FAILED;
@@ -78,7 +81,7 @@ TestRes TestAsGetAmount(AmountSet set, const char* element, double* outAmount){
         printf("TestAsGetAmount_Failed\n");
         return TEST_FAILED;
     }
-    printf("%d\n",*outAmount);
+    printf("%f\n",*outAmount);
     return TEST_SUCCESS;
     
 }
@@ -95,7 +98,7 @@ TestRes TestAsRegister(AmountSet set, const char* element){
             return TEST_SUCCESS;
         }
     }
-    if(asContains == true){
+    if(asContains(set,element)){
 
         if(result != AS_ITEM_ALREADY_EXISTS){
             printf("TestAsRegister_Failed\n");
@@ -129,7 +132,7 @@ TestRes TestAsChangeAmount(AmountSet set, const char* element, double amount){
             return TEST_SUCCESS;
         }
     }
-    if(asContains == false){
+    if(!asContains(set,element)){
 
         if(result != AS_ITEM_DOES_NOT_EXIST){
             printf("TestAsChangeAmount_Failed\n");
@@ -161,7 +164,7 @@ AmountSetResult result = asDelete(set,element);
             return TEST_SUCCESS;
         }
     }
-    if(asContains == false){
+    if(!asContains(set,element)){
 
         if(result != AS_ITEM_DOES_NOT_EXIST){
             printf("TestAsDelete_Failed\n");
@@ -191,16 +194,11 @@ TestRes TestAsGetFirst(AmountSet set){
     return TEST_SUCCESS;}
 
 TestRes TestAsGetNext(AmountSet set){
-    if(!set || !set->current){
-        AmountSet copy = asCopy(set);
-        if(asGetNext(copy)){
-            asDestroy(copy);
-            free(copy);
-            printf("TestAsGetNext_Failed\n");
-            return TEST_FAILED;
-        }
-    }
     char* result = asGetNext(set);
+    if(!set && result){
+        printf("TestAsGetNext_Failed\n");
+        return TEST_FAILED;
+    }
     if(!set->current && result){
         printf("TestAsGetNext_Failed\n");
         return TEST_FAILED;

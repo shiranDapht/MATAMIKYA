@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "../amount_set_str.c"
-#include "../shiran_tasts/shiran_amount_set_str_test.h"
 
 
 void PrintAllElements(AmountSet set, FILE* file){

@@ -1,8 +1,8 @@
-#ifndef SHIRAN_AMOUNT_SET_STR_TESTS_H_
-#define SHIRAN_AMOUNT_SET_STR_TESTS_H_
+#ifndef AMOUNT_SET_STR_TESTS_H_
+#define AMOUNT_SET_STR_TESTS_H_
 
 #include <stdio.h>
-#include "../amount_set_str.c" 
+#include "../amount_set_str.h" 
 
 typedef enum TestRes_t{
     TEST_SUCCESS,

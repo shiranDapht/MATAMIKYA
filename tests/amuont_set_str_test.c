@@ -24,12 +24,14 @@ TestRes TestAsCopy(AmountSet set){
     AmountSet copy = asCopy(set);
     asGetFirst(copy);
     AS_FOREACH(char*,it,set){
-        if(CompareStr(it,copy->current->data)){
+        if(CompareStr(it ,copy->current->data)){
+            asDestroy(copy);
             printf("TestAsCopy_Failed\n");
             return TEST_FAILED;
         }
         asGetNext(copy);
     }
+    asDestroy(copy);
     printf("TestAsCopy_Success\n");
     return TEST_SUCCESS;
 }
@@ -50,7 +52,7 @@ TestRes TestAsContains(AmountSet set, const char* element){
         printf("TestAsContains_Failed\n");
         return TEST_FAILED;
     }
-    printf("%s", result ? "true" : "false");
+    printf("%s\n", result ? "true" : "false");
     return TEST_SUCCESS;
 }
 
@@ -190,8 +192,9 @@ TestRes TestAsGetFirst(AmountSet set){
         printf("TestAsGetFIrst_Failed\n");
         return TEST_FAILED;
     }
-    printf("%s\n", first);
-    return TEST_SUCCESS;}
+    printf("%s\n", !first ? "NULL" : first);
+    return TEST_SUCCESS;
+}
 
 TestRes TestAsGetNext(AmountSet set){
     char* result = asGetNext(set);
@@ -244,11 +247,11 @@ int main(){
         arr[i] = asCreate();
         int sizeOfSet;
         scanf("%d", &sizeOfSet);
-        for (int i = 0; i < sizeOfSet; i++)
+        for (int j = 0; j < sizeOfSet; j++)
         {
-            char* str;
-            double amount;
-            scanf("%s %f",str, &amount);
+            char str[100];
+            double amount = 0;
+            scanf("%s %lf",str, &amount);
             asRegister(arr[i],str);
             asChangeAmount(arr[i],str,amount);
         }        
@@ -268,22 +271,22 @@ int main(){
 
     //Testing asContains
     for (int i = 0; i < 5; i++){
-        char* str;
+        char str[100];
         scanf("%s",str);
         TestAsContains(arr[i],str);
     }
 
     //Testing asGetAmount
     for (int i = 0; i < 5; i++){
-        int outAmount;
-        char* str;
+        double outAmount;
+        char str[100];
         scanf("%s",str);
-        TestAsGetAmount(arr[i],str,&outAmount);
+        TestAsGetAmount(arr[i],str, &outAmount);
     }
 
     //Testing asRegister
     for (int i = 0; i < 5; i++){
-        char* str;
+        char str[100];
         scanf("%s",str);
         TestAsRegister(arr[i],str);
         AS_FOREACH(char*,it,arr[i]){
@@ -295,14 +298,14 @@ int main(){
     //Testing asChangeAmount
     for (int i = 0; i < 5; i++){
         double amount;
-        char* str;
-        scanf("%s %f",str,&amount);
+        char str[100];
+        scanf("%s %lf",str,&amount);
         TestAsChangeAmount(arr[i],str,amount);
     }
 
     //Testing asDelete
     for (int i = 0; i < 5; i++){
-        char* str;
+        char str[100];
         scanf("%s",str);
         TestAsDelete(arr[i],str);
         AS_FOREACH(char*,it,arr[i]){

@@ -1,4 +1,3 @@
-//#include "amount_set.h"
 #include "amount_set_str.h"
 #include <stdlib.h>
 #include <string.h>
@@ -125,9 +124,6 @@ char* asGetNext(AmountSet set){
         return NULL;
     }
     set->current = set->current->next; // Advance one step
-    if(!set->current){
-        return NULL;
-    }
     return set->current->data;
 };
 
@@ -190,8 +186,8 @@ bool asContains(AmountSet set, const char* element){
     if(!set || !element){
         return false;
     }
-
-    if(!findElement(set, element)){
+    asNode ForDebug = findElement(set, element);
+    if(ForDebug != NULL){
         return true;
     }
 
@@ -293,7 +289,7 @@ AmountSetResult asChangeAmount(AmountSet set, const char* element, const double 
         return AS_NULL_ARGUMENT;
     }
 
-    if(asContains(set,element) == false){
+    if(!asContains(set,element)){
         return AS_ITEM_DOES_NOT_EXIST;
     }
 

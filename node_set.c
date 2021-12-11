@@ -53,6 +53,7 @@ Node createNode(char* itemName, double amount){
         deleteNode(newNode);
         return NULL;
     }
+    setNext(newNode, NULL);
     return newNode;
 }
 

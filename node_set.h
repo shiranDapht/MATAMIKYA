@@ -22,23 +22,23 @@ void deleteNode(Node node);
 
 char* getItemName(Node node);
 
-void setItemName(Node node, char* itemName);
+bool setItemName(Node node, char* itemName);
 
 double getAmount(Node node);
 
-void setAmount(Node node, double amount);
+bool setAmount(Node node, double amount);
 
 Node getNext(Node node);
 
-void setNext(Node node ,Node next);
+bool setNext(Node node ,Node next);
 
 Node getHead(AmountSet as);
 
-void setHead(AmountSet as, Node node);
+bool setHead(AmountSet as, Node head);
 
 Node getCurrent(AmountSet as);
 
-void setCurrent(AmountSet as, Node current);
+bool setCurrent(AmountSet as, Node current);
 
 #endif
 

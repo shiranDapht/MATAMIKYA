@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define ERROR_AMOUNT -1
+
 typedef struct node_t* Node;
 
 char* copyItemName(const char* itemName);
@@ -13,6 +15,10 @@ char* copyItemName(const char* itemName);
 int compareItemNames(const char* itemName1, const char* itemName2);
 
 void freeItemName(char* itemName);
+
+Node createNode(char* itemName, double amount);
+
+void deleteNode(Node node);
 
 char* getItemName(Node node);
 

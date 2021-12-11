@@ -24,14 +24,6 @@ char* copyItemName(const char* itemName){
     return itemNameCopy;
 }
 
-
-/**
- * @brief make sure to check null argument before use
- * 
- * @param itemName1 
- * @param itemName2 
- * @return int 
- */
 int compareItemNames(const char* itemName1, const char* itemName2){
     return strcmp(itemName1, itemName2);
 }
@@ -61,6 +53,7 @@ Node createNode(char* itemName, double amount){
         deleteNode(newNode);
         return NULL;
     }
+    setNext(newNode, NULL);
     return newNode;
 }
 

@@ -2,7 +2,7 @@
 #include "node_set.h"
 
 AmountSet asCreate(){
-    return (AmountSet)malloc(sizeof(AmountSet));
+    return createAmountSet();
 }
 
 void asDestroy(AmountSet set){
@@ -21,9 +21,12 @@ AmountSet asCopy(AmountSet set){
     if(!copy){
         return NULL;
     }
+    Node original_iterator_state = getCurrent(set);
     AS_FOREACH(char*,it,set){
         asRegister(copy,it);
     }
+    setCurrent(set,original_iterator_state);
+    return copy;
 }
 
 int asGetSize(AmountSet set){
@@ -84,10 +87,10 @@ AmountSetResult asRegister(AmountSet set, const char* element){
         return AS_ITEM_ALREADY_EXISTS;
     }
     AS_FOREACH(char*,it,set){
-        Node next_node = getItemName(getNext(getCurrent(set)));
+        Node next_node = getNext(getCurrent(set));
         //it < element < next
-        if(compareItemNames(it,element) < 0 && compareItemNames(element,next_node) < 0){
-            Node new_node = createNode(element,0);
+        if(compareItemNames(it,element) < 0 && compareItemNames(element,getItemName(next_node)) < 0){
+            Node new_node = createNode(copyItemName(element),0);
             setNext(new_node,next_node);
             setNext(getCurrent(set),new_node);
             break;
@@ -104,11 +107,11 @@ AmountSetResult asDelete(AmountSet set, const char* element){
     if (!asContains(set,element)){
         return AS_ITEM_DOES_NOT_EXIST;
     }
-    
+
     Node previus_node = getHead(set);
     AS_FOREACH(char*,it,set){
         if(!compareItemNames(it,element)){
-            setNext(previus_node,getNext(getCurrent));
+            setNext(previus_node,getNext(getCurrent(set)));
             deleteNode(getCurrent(set));
             break;
         }

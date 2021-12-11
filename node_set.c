@@ -1,6 +1,5 @@
 #include "node_set.h"
-
-
+#include "amount_set_str.h"
 struct node_t{
     char* itemName_t;
     double amount_t;
@@ -39,21 +38,18 @@ Node createNode(char* itemName, double amount){
     if(!itemName){
         return NULL;
     }
-    Node newNode = (Node)malloc(sizeof(newNode));
+    Node newNode = (Node)malloc(sizeof(struct node_t));
     if(!newNode){
         return NULL;
     }
+    //Init members of Node
     bool b = setAmount(newNode, amount);
-    if(!b){
-        deleteNode(newNode);
-        return NULL;
-    }
-    setItemName(newNode, itemName);
-    if(!newNode->itemName_t){
-        deleteNode(newNode);
-        return NULL;
-    }
+    newNode->itemName_t = copyItemName(itemName);
     setNext(newNode, NULL);
+    if(!b || !newNode->itemName_t){
+        deleteNode(newNode);
+        return NULL;
+    }
     return newNode;
 }
 
@@ -139,4 +135,8 @@ bool setCurrent(AmountSet as, Node current){
     }
     as->current_t = current;
     return true;
+}
+
+AmountSet createAmountSet(){
+    return (AmountSet)malloc(sizeof(struct AmountSet_t));
 }

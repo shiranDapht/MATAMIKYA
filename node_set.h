@@ -141,7 +141,6 @@ Node getCurrent(AmountSet as);
  */
 bool setCurrent(AmountSet as, Node current);
 
+AmountSet createAmountSet();
+
 #endif
-
-
-

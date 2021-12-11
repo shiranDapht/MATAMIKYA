@@ -1,5 +1,6 @@
 #include "amuont_set_str_tests.h"
-#include "../amount_set_str.c"
+#include "../amount_set_str.h"
+#include "../node_set.h"
 
 TestRes TestAmountSet(){
     AmountSet arr[100];
@@ -24,7 +25,7 @@ TestRes TestAsCopy(AmountSet set){
     AmountSet copy = asCopy(set);
     asGetFirst(copy);
     AS_FOREACH(char*,it,set){
-        if(CompareStr(it ,copy->current->data)){
+        if(compareItemNames(it , getItemName(getCurrent(copy)) )){
             asDestroy(copy);
             printf("TestAsCopy_Failed\n");
             return TEST_FAILED;
@@ -150,7 +151,9 @@ TestRes TestAsChangeAmount(AmountSet set, const char* element, double amount){
         printf("TestAsChangeAmount_Failed\n");
         return TEST_FAILED;
     }
-    printf("%s\n",findElement(set,element)->amount == amount + previusValue ? "true\n" : "TestAsChangeAmount_Failed\n");
+    double outAmount;
+    asGetAmount(set,element,&outAmount);
+    printf("%s\n",  outAmount == amount + previusValue ? "true\n" : "TestAsChangeAmount_Failed\n");
     return TEST_SUCCESS;
 }
 
@@ -202,7 +205,7 @@ TestRes TestAsGetNext(AmountSet set){
         printf("TestAsGetNext_Failed\n");
         return TEST_FAILED;
     }
-    if(!set->current && result){
+    if(!getCurrent(set) && result){
         printf("TestAsGetNext_Failed\n");
         return TEST_FAILED;
     }
@@ -222,7 +225,7 @@ TestRes TestAsClear(AmountSet set){
             return TEST_SUCCESS;
         }
     }
-    if(result == AS_SUCCESS && !set->head->next){
+    if(result == AS_SUCCESS && !getNext(getHead(set))){
         printf("TestAsClear_Failed\n");
         return TEST_FAILED;
     }

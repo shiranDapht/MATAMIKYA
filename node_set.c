@@ -8,8 +8,8 @@ struct node_t{
 };
 
 struct AmountSet_t{
-    Node head;
-    Node current;
+    Node head_t;
+    Node current_t;
 };
 
 char* copyItemName(const char* itemName){
@@ -44,11 +44,32 @@ void freeItemName(char* itemName){
 }
 
 Node createNode(char* itemName, double amount){
-
+    if(!itemName){
+        return NULL;
+    }
+    Node newNode = (Node)malloc(sizeof(newNode));
+    if(!newNode){
+        return NULL;
+    }
+    bool b = setAmount(newNode, amount);
+    if(!b){
+        deleteNode(newNode);
+        return NULL;
+    }
+    setItemName(newNode, itemName);
+    if(!newNode->itemName_t){
+        deleteNode(newNode);
+        return NULL;
+    }
+    return newNode;
 }
 
 void deleteNode(Node node){
-    
+    if(!node){
+        return;
+    }
+    freeItemName(node->itemName_t);
+    free(node);
 }
 
 char* getItemName(Node node){
@@ -58,12 +79,13 @@ char* getItemName(Node node){
     return node->itemName_t;
 }
 
-void setItemName(Node node, char* itemName){
+bool setItemName(Node node, char* itemName){
     if(!node || !itemName){
-        return;
+        return false;
     }
     freeItemName(node->itemName_t);
     node->itemName_t = copyItemName(itemName);
+    return true;
 }
 
 double getAmount(Node node){
@@ -73,21 +95,55 @@ double getAmount(Node node){
     return node->amount_t;
 }
 
-void setAmount(Node node, double amount){
-    if(!node){
-        return;
+bool setAmount(Node node, double amount){
+    if(!node || amount < 0){
+        return false;
     }
-
+    node->amount_t = amount;
+    return true;
 }
 
-Node getNext(Node node);
+Node getNext(Node node){
+    if(!node){
+        return NULL;
+    }
+    return node->next_t;
+}
 
-void setNext(Node node ,Node next);
+bool setNext(Node node ,Node next){
+    if(!node || !next){
+        return false;
+    }
+    node->next_t = next;
+    return true;
+}
 
-Node getHead(AmountSet as);
+Node getHead(AmountSet as){
+    if(!as){
+        return NULL;
+    }
+    return as->head_t;
+}
 
-void setHead(AmountSet as, Node node);
+bool setHead(AmountSet as, Node head){
+    if(!as || !head){
+        return false;
+    }
+    as->head_t = head;
+    return true;
+}
 
-Node getCurrent(AmountSet as);
+Node getCurrent(AmountSet as){
+    if(!as){
+        return NULL;
+    }
+    return as->current_t;
+}
 
-void setCurrent(AmountSet as, Node current);
+bool setCurrent(AmountSet as, Node current){
+    if(!as || !current){
+        return false;
+    }
+    as->current_t = current;
+    return true;
+}

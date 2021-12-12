@@ -93,9 +93,3 @@ TestAsClear_Success
 TestAsClear_Success
 TestAsClear_Success
 TestAsClear_Success
-Testing asDestroy
-TestAsDestroy_Failed
-TestAsDestroy_Failed
-TestAsDestroy_Failed
-TestAsDestroy_Failed
-TestAsDestroy_Failed

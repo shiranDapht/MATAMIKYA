@@ -1,6 +1,7 @@
 #ifndef GENERIC_NODE_H_
 #define GENERIC_NODE_H_
 
+#include <stdbool.h>
 typedef struct Node_t* Node;
 
 unsigned int getId(Node node);

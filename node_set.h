@@ -114,16 +114,6 @@ bool setNext(Node node ,Node next);
 Node getHead(AmountSet as);
 
 /**
- * @brief Set the Head object
- * 
- * @param as 
- * @param head 
- * @return true 
- * @return false 
- */
-bool setHead(AmountSet as, Node head);
-
-/**
  * @brief Get the Current object
  * 
  * @param as 

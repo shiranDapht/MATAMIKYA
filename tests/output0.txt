@@ -1,54 +1,99 @@
+Testing asCreate
 TestAmountSet_Success
+Testing asCopy
 TestAsCopy_Success
 TestAsCopy_Success
 TestAsCopy_Success
 TestAsCopy_Success
 TestAsCopy_Success
-0
-0
-0
-0
-0
+Testing asGetSize
+1
+2
+3
+4
+5
+Testing asContains
 false
+true
+true
+true
 false
-false
-false
-false
+Testing asGetAmount
 -1
+1.200000
+0.000000
 -1
--1
--1
--1
-TestAsRegister_Failed
-TestAsRegister_Failed
-TestAsRegister_Failed
-TestAsRegister_Failed
-TestAsRegister_Failed
+1.860000
+Testing asRegister
+TestAsRegister_Success
+a
+TestAsRegister_Success
+a
+ab
+abc
+TestAsRegister_Success
+a
+ab
+abb
+abc
+TestAsRegister_Success
+a
+ab
+abc
+abcd
+TestAsRegister_Success
+a
+aa
+ab
+abc
+abcd
+abcde
+Testing asChangeAmount
 TestAsChangeAmount_Success
-TestAsChangeAmount_Success
-TestAsChangeAmount_Success
-TestAsChangeAmount_Success
-TestAsChangeAmount_Success
+true
+true
+true
+true
+Testing asDelete
 TestAsDelete_Success
+a
 TestAsDelete_Success
+a
+ab
 TestAsDelete_Success
+ab
+abb
+abc
 TestAsDelete_Success
+a
+ab
+abc
 TestAsDelete_Success
+a
+aa
+ab
+abc
+abcd
+abcde
+Testing asGetFirst
+a
+a
+ab
+a
+a
+Testing asGetNext
 NULL
-NULL
-NULL
-NULL
-NULL
-NULL
-NULL
-NULL
-NULL
-NULL
-TestAsClear_Failed
-TestAsClear_Failed
-TestAsClear_Failed
-TestAsClear_Failed
-TestAsClear_Failed
+ab
+abb
+ab
+aa
+Testing asClear
+TestAsClear_Success
+TestAsClear_Success
+TestAsClear_Success
+TestAsClear_Success
+TestAsClear_Success
+Testing asDestroy
 TestAsDestroy_Failed
 TestAsDestroy_Failed
 TestAsDestroy_Failed

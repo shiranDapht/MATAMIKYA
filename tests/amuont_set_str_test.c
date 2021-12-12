@@ -90,6 +90,7 @@ TestRes TestAsGetAmount(AmountSet set, const char* element, double* outAmount){
 }
 
 TestRes TestAsRegister(AmountSet set, const char* element){
+    bool is_contained = asContains(set,element);
     AmountSetResult result = asRegister(set,element);
     if(!set || !element){
         if(result != AS_NULL_ARGUMENT){
@@ -101,7 +102,7 @@ TestRes TestAsRegister(AmountSet set, const char* element){
             return TEST_SUCCESS;
         }
     }
-    if(asContains(set,element)){
+    if(is_contained){
 
         if(result != AS_ITEM_ALREADY_EXISTS){
             printf("TestAsRegister_Failed\n");
@@ -113,10 +114,6 @@ TestRes TestAsRegister(AmountSet set, const char* element){
         }
     }
 
-    if(result != AS_SUCCESS || result != AS_OUT_OF_MEMORY){
-        printf("TestAsRegister_Failed\n");
-        return TEST_FAILED;
-    }
     printf("TestAsRegister_Success\n");
     return TEST_SUCCESS;
 }
@@ -147,17 +144,19 @@ TestRes TestAsChangeAmount(AmountSet set, const char* element, double amount){
         }
     }
 
-    if(result != AS_SUCCESS || result != AS_INSUFFICIENT_AMOUNT){
+
+    double outAmount;
+    asGetAmount(set,element,&outAmount);
+    if(outAmount != amount + previusValue && result != AS_INSUFFICIENT_AMOUNT){
         printf("TestAsChangeAmount_Failed\n");
         return TEST_FAILED;
     }
-    double outAmount;
-    asGetAmount(set,element,&outAmount);
-    printf("%s\n",  outAmount == amount + previusValue ? "true\n" : "TestAsChangeAmount_Failed\n");
+    printf("true\n");
     return TEST_SUCCESS;
 }
 
 TestRes TestAsDelete(AmountSet set, const char* element){
+    bool is_contained = asContains(set,element);
 AmountSetResult result = asDelete(set,element);
     if(!set || !element){
         if(result != AS_NULL_ARGUMENT){
@@ -169,7 +168,7 @@ AmountSetResult result = asDelete(set,element);
             return TEST_SUCCESS;
         }
     }
-    if(!asContains(set,element)){
+    if(!is_contained){
 
         if(result != AS_ITEM_DOES_NOT_EXIST){
             printf("TestAsDelete_Failed\n");
@@ -233,16 +232,6 @@ TestRes TestAsClear(AmountSet set){
     return TEST_SUCCESS;
 }
 
-TestRes TestAsDestroy(AmountSet set){
-    asDestroy(set);
-    if(set){
-      printf("TestAsDestroy_Failed\n");
-      return TEST_FAILED;
-    }
-    printf("TestAsDestroy_Success\n");
-    return TEST_SUCCESS;
-}
-
 int main(){
     //Geting array of sets
     AmountSet arr[5];
@@ -261,18 +250,23 @@ int main(){
     }
 
     //Testing asCreate
+    printf("Testing asCreate\n");
     TestAmountSet();
+
     //Testing asCopy
+    printf("Testing asCopy\n");
     for (int i = 0; i < 5; i++){
         TestAsCopy(arr[i]);
     }
     
     //Testing asGetSize
+    printf("Testing asGetSize\n");
     for (int i = 0; i < 5; i++){
         TestAsGetSize(arr[i]);
     }
 
     //Testing asContains
+    printf("Testing asContains\n");
     for (int i = 0; i < 5; i++){
         char str[100];
         scanf("%s",str);
@@ -280,6 +274,7 @@ int main(){
     }
 
     //Testing asGetAmount
+    printf("Testing asGetAmount\n");
     for (int i = 0; i < 5; i++){
         double outAmount;
         char str[100];
@@ -288,6 +283,7 @@ int main(){
     }
 
     //Testing asRegister
+    printf("Testing asRegister\n");
     for (int i = 0; i < 5; i++){
         char str[100];
         scanf("%s",str);
@@ -299,6 +295,7 @@ int main(){
     }
 
     //Testing asChangeAmount
+    printf("Testing asChangeAmount\n");
     for (int i = 0; i < 5; i++){
         double amount;
         char str[100];
@@ -307,6 +304,7 @@ int main(){
     }
 
     //Testing asDelete
+    printf("Testing asDelete\n");
     for (int i = 0; i < 5; i++){
         char str[100];
         scanf("%s",str);
@@ -317,21 +315,25 @@ int main(){
     }
 
     //Tesintg asGetFirst
+    printf("Testing asGetFirst\n");
     for (int i = 0; i < 5; i++){
         TestAsGetFirst(arr[i]);
     }
     
     //Testing asGetNext
+    printf("Testing asGetNext\n");
     for (int i = 0; i < 5; i++){
         TestAsGetNext(arr[i]);
     }
 
     //Testing asClear
+    printf("Testing asClear\n");
     for (int i = 0; i < 5; i++){
         TestAsClear(arr[i]);
     }
 
     //Testing asDestroy
+    printf("Testing asDestroy\n");
     for (int i = 0; i < 5; i++){
         TestAsDestroy(arr[i]);
     }

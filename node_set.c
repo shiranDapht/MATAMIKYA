@@ -100,7 +100,7 @@ Node getNext(Node node){
 }
 
 bool setNext(Node node ,Node next){
-    if(!node || !next){
+    if(!node){
         return false;
     }
     node->next_t = next;
@@ -112,14 +112,6 @@ Node getHead(AmountSet as){
         return NULL;
     }
     return as->head_t;
-}
-
-bool setHead(AmountSet as, Node head){
-    if(!as || !head){
-        return false;
-    }
-    as->head_t = head;
-    return true;
 }
 
 Node getCurrent(AmountSet as){
@@ -138,5 +130,15 @@ bool setCurrent(AmountSet as, Node current){
 }
 
 AmountSet createAmountSet(){
-    return (AmountSet)malloc(sizeof(struct AmountSet_t));
+    AmountSet set = (AmountSet)malloc(sizeof(struct AmountSet_t));
+    if(!set){
+        return NULL;
+    }
+    set->head_t = (Node)malloc(sizeof(struct node_t));
+    if(!set->head_t){
+        return NULL;
+    }
+    set->head_t->next_t = NULL;
+    set->current_t = NULL;
+    return set;
 }

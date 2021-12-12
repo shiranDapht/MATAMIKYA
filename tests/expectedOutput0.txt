@@ -1,29 +1,30 @@
+Testing asCreate
 TestAmountSet_Success
+Testing asCopy
 TestAsCopy_Success
 TestAsCopy_Success
 TestAsCopy_Success
 TestAsCopy_Success
 TestAsCopy_Success
+Testing asGetSize
 1
 2
 3
 4
 5
+Testing asContains
 false
 true
 true
 true
 false
-TestAsGetAmount_Success
-TestAsGetAmount_Success
-TestAsGetAmount_Success
-TestAsGetAmount_Success
-TestAsGetAmount_Success
+Testing asGetAmount
 -1
-1.2
-0
+1.200000
+0.000000
 -1
-1.86
+1.860000
+Testing asRegister
 TestAsRegister_Success
 a
 TestAsRegister_Success
@@ -47,11 +48,13 @@ ab
 abc
 abcd
 abcde
+Testing asChangeAmount
 TestAsChangeAmount_Success
-TestAsChangeAmount_Success
 true
 true
 true
+true
+Testing asDelete
 TestAsDelete_Success
 a
 TestAsDelete_Success
@@ -72,21 +75,25 @@ ab
 abc
 abcd
 abcde
+Testing asGetFirst
 a
 a
 ab
 a
 a
+Testing asGetNext
 NULL
 ab
 abb
 ab
 aa
+Testing asClear
 TestAsClear_Success
 TestAsClear_Success
 TestAsClear_Success
 TestAsClear_Success
 TestAsClear_Success
+Testing asDestroy
 TestAsDestroy_Success
 TestAsDestroy_Success
 TestAsDestroy_Success

@@ -7,16 +7,16 @@ TestRes TestAmountSet(){
     for(int i = 0; i<100; i++){
         arr[i] = asCreate();
         if(!arr[i]){
-            for(int j=0;j<i;j++){
-                asDestroy(arr[j]);
-            }
+           for(int j=0;j<i;j++){
+             asDestroy(arr[j]);
+         }
             printf("TestAmountSet_Failed\n");
             return TEST_FAILED;
         }
     }
     for(int i = 0; i< 100; i++){
         asDestroy(arr[i]);
-    }
+}
     printf("TestAmountSet_Success\n");
     return TEST_SUCCESS;
 }
@@ -25,7 +25,8 @@ TestRes TestAsCopy(AmountSet set){
     AmountSet copy = asCopy(set);
     asGetFirst(copy);
     AS_FOREACH(char*,it,set){
-        if(compareItemNames(it , getItemName(getCurrent(copy)) )){
+        char* name_from_copy = getItemName(getCurrent(copy));
+        if(compareItemNames(name_from_copy,it)){
             asDestroy(copy);
             printf("TestAsCopy_Failed\n");
             return TEST_FAILED;
@@ -224,7 +225,7 @@ TestRes TestAsClear(AmountSet set){
             return TEST_SUCCESS;
         }
     }
-    if(result == AS_SUCCESS && !getNext(getHead(set))){
+    if(result == AS_SUCCESS && getNext(getHead(set))){
         printf("TestAsClear_Failed\n");
         return TEST_FAILED;
     }
@@ -291,7 +292,6 @@ int main(){
         AS_FOREACH(char*,it,arr[i]){
             printf("%s\n",it);
         }
-        
     }
 
     //Testing asChangeAmount
@@ -332,10 +332,9 @@ int main(){
         TestAsClear(arr[i]);
     }
 
-    //Testing asDestroy
-    printf("Testing asDestroy\n");
-    for (int i = 0; i < 5; i++){
-        TestAsDestroy(arr[i]);
+    for(int i = 0; i<5;i++){
+        asDestroy(arr[i]);
     }
 
+    return 0;
 }

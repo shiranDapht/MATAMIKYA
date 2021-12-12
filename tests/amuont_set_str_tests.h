@@ -10,7 +10,6 @@ typedef enum TestRes_t{
 }TestRes;
 
 TestRes TestAmountSet();
-TestRes TestAsDestroy(AmountSet set);
 TestRes TestAsCopy(AmountSet set);
 TestRes TestAsGetSize(AmountSet set);
 TestRes TestAsContains(AmountSet set, const char* element);

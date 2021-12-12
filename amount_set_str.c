@@ -8,10 +8,15 @@ AmountSet asCreate()
 
 void asDestroy(AmountSet set)
 {
-    if (!set)
-    {
+    if(!set){
+        return;
+    }
+    if (getHead(set)){
         asClear(set);
-        deleteNode(getHead(set));
+        free(getHead(set));
+        free(set);
+    }
+    else{
         free(set);
     }
 }
@@ -30,7 +35,11 @@ AmountSet asCopy(AmountSet set)
     Node original_iterator_state = getCurrent(set);
     AS_FOREACH(char *, it, set)
     {
-        asRegister(copy, it);
+        if(asRegister(copy, it) != AS_SUCCESS){
+            asDestroy(copy);
+            setCurrent(set, original_iterator_state);
+            return NULL;
+        }
     }
     setCurrent(set, original_iterator_state);
     return copy;
@@ -108,13 +117,14 @@ AmountSetResult asRegister(AmountSet set, const char *element)
     {
         return AS_ITEM_ALREADY_EXISTS;
     }
+    Node new_node = createNode(element, 0);
+    if (!new_node)
+    {
+        return AS_OUT_OF_MEMORY;
+    }
+
     if (!asGetFirst(set))
     {
-        Node new_node = createNode(copyItemName(element), 0);
-        if (!new_node)
-        {
-            return AS_OUT_OF_MEMORY;
-        }
         setNext(getHead(set), new_node);
         return AS_SUCCESS;
     }
@@ -127,21 +137,11 @@ AmountSetResult asRegister(AmountSet set, const char *element)
             // previus < element < it
             if (compareItemNames(previus, element) < 0 && compareItemNames(element, it) < 0)
             {
-                Node new_node = createNode(copyItemName(element), 0);
-                if (!new_node)
-                {
-                    return AS_OUT_OF_MEMORY;
-                }
                 setNext(previus_node, new_node);
                 setNext(new_node, getCurrent(set));
                 return AS_SUCCESS;
             }
             previus_node = getCurrent(set);
-        }
-        Node new_node = createNode(copyItemName(element), 0);
-        if (!new_node)
-        {
-            return AS_OUT_OF_MEMORY;
         }
         setNext(previus_node, new_node);
         return AS_SUCCESS;
@@ -176,25 +176,23 @@ AmountSetResult asDelete(AmountSet set, const char *element)
 
 AmountSetResult asClear(AmountSet set)
 {
-    if (!set)
-    {
+    if (!set){
         return AS_NULL_ARGUMENT;
     }
 
     Node current = getHead(set);
-    if (!current)
-    {
+    if (!current){
         return AS_NULL_ARGUMENT;
     }
 
     current = getNext(current);
 
-    while (current)
-    {
+    while (current){
         Node toDelete = current;
         current = getNext(current);
         deleteNode(toDelete);
     }
+    setNext(getHead(set),NULL);
     return AS_SUCCESS;
 }
 

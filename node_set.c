@@ -34,7 +34,7 @@ void freeItemName(char* itemName){
     free(itemName);
 }
 
-Node createNode(char* itemName, double amount){
+Node createNode(const char* itemName, double amount){
     if(!itemName){
         return NULL;
     }
@@ -57,7 +57,7 @@ void deleteNode(Node node){
     if(!node){
         return;
     }
-    freeItemName(node->itemName_t);
+    freeItemName(getItemName(node));
     free(node);
 }
 
@@ -136,6 +136,7 @@ AmountSet createAmountSet(){
     }
     set->head_t = (Node)malloc(sizeof(struct node_t));
     if(!set->head_t){
+        asDestroy(set);
         return NULL;
     }
     set->head_t->next_t = NULL;

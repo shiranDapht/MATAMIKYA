@@ -42,7 +42,7 @@ void freeItemName(char* itemName);
  * @param amount 
  * @return Node 
  */
-Node createNode(char* itemName, double amount);
+Node createNode(const char* itemName, double amount);
 
 /**
  * @brief delete node struct include all members

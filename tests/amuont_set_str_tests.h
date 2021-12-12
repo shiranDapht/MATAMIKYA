@@ -16,7 +16,7 @@ TestRes TestAsContains(AmountSet set, const char* element);
 TestRes TestAsGetAmount(AmountSet set, const char* element, double* outAmount);
 
 TestRes TestAsRegister(AmountSet set, const char* element);
-TestRes TestAChangeAmount(AmountSet set, const char* element, double amount);
+TestRes TestAsChangeAmount(AmountSet set, const char* element, double amount);
 TestRes TestAsDelete(AmountSet set, const char* element);
 TestRes TestAsClear(AmountSet set);
 TestRes TestAsGetFirst(AmountSet set);

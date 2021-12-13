@@ -6,12 +6,42 @@
 typedef struct ItemData_t* ItemData;
 
 /**
+ * @brief Create a Item Data object
+ * 
+ * @param product_data 
+ * @param copy_data 
+ * @param free_data 
+ * @param product_price 
+ * @param units 
+ * @param item_sold 
+ * @return ItemData 
+ */
+ItemData createItemData(MtmProductData product_data, MtmCopyData copy_data,
+        MtmFreeData free_data, MtmGetProductPrice product_price,
+        MatamikyaAmountType units, double item_sold);
+
+/**
+ * @brief 
+ * 
+ * @param item_data 
+ */
+void deleteItemData(ItemData item_data);
+
+/**
  * @brief Get the Product Data object
  * 
  * @param item_data 
  * @return MtmProductData 
  */
 MtmProductData getProductData(ItemData item_data);
+
+/**
+ * @brief prints item's data
+ * 
+ * @param item_data 
+ */
+void printItemData(ItemData item_data);
+
 
 /**
  * @brief Set the Product Data object
@@ -119,17 +149,6 @@ bool setItemSold(ItemData item_data, double item_sold);
  * @param item_data 
  * @return double 
  */
-double getProductAmount(ItemData item_data);
-
-/**
- * @brief Set the Product Amount object
- * 
- * @param item_data 
- * @param product_amount 
- * @return true 
- * @return false 
- */
-bool setProductAmount(ItemData item_data, double product_amount);
-
+double getProductIncome(ItemData item_data);
 
 #endif

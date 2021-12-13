@@ -8,7 +8,6 @@ struct ItemData_t{
     MtmGetProductPrice product_price_t;
     MatamikyaAmountType units_t;
     double item_sold_t;
-    double product_amount_t;
 };
 
 MtmProductData getProductData(ItemData item_data){
@@ -68,6 +67,7 @@ bool setUnits(ItemData item_data, MatamikyaAmountType units){
         return false;
     }
     item_data->units_t = units;
+    return true;
 }
 
 double getItemSold(ItemData item_data){
@@ -82,14 +82,8 @@ bool setItemSold(ItemData item_data, double item_sold){
     return true;
 }
 
-double getProductAmount(ItemData item_data){
-    return item_data->product_amount_t;
-}
-
-bool setProductAmount(ItemData item_data, double product_amount){
-    if(!item_data){
-        return false;
-    }
-    item_data->product_amount_t = product_amount;
-    return true;
+double getProductIncome(ItemData item_data){
+    double items_sold = getItemSold(item_data);
+    MtmProductData item_product_data = getProductData(item_data);
+    return getProductPrice(item_data)(item_product_data,items_sold);
 }

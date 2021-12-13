@@ -3,7 +3,7 @@
 
 struct Node_t{
     unsigned int id_t;
-    void* data_t;
+    NodeData data_t;
     Node next_t;
 };
 
@@ -20,11 +20,11 @@ bool setId(Node node, unsigned int id){
     return true;
 }
 
-void* getData(Node node){
+NodeData getData(Node node){
     return node->data_t;
 }
 
-bool setData(Node node, void* data){
+bool setData(Node node, NodeData data){
     if(!node || !data){
         return false;
     }

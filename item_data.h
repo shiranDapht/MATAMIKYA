@@ -36,14 +36,6 @@ void deleteItemData(ItemData item_data);
 MtmProductData getProductData(ItemData item_data);
 
 /**
- * @brief prints item's data
- * 
- * @param item_data 
- */
-void printItemData(ItemData item_data);
-
-
-/**
  * @brief Set the Product Data object
  * 
  * @param item_data 
@@ -150,5 +142,23 @@ bool setItemSold(ItemData item_data, double item_sold);
  * @return double 
  */
 double getProductIncome(ItemData item_data);
+
+/**
+ * @brief Get the In Storeg object
+ * 
+ * @param item_data 
+ * @return double 
+ */
+double getInStoreg(ItemData item_data);
+
+/**
+ * @brief Set the In Storeg object
+ * 
+ * @param item_data 
+ * @param amount 
+ * @return true 
+ * @return false 
+ */
+bool setInStoreg(ItemData item_data, double amount);
 
 #endif

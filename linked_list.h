@@ -3,6 +3,7 @@
 
 #include "generic_node.h"
 
+
 typedef struct LinkedList_t* LinkedList;
 
 /**
@@ -12,8 +13,13 @@ typedef struct LinkedList_t* LinkedList;
  * @param current 
  * @return LinkedList 
  */
-LinkedList createLinkedList(Node head, Node current);
+LinkedList createLinkedList();
 
+/**
+ * @brief destroy list completely
+ * 
+ * @param list 
+ */
 void deleteLinkedList(LinkedList list);
 
 
@@ -24,16 +30,6 @@ void deleteLinkedList(LinkedList list);
  * @return Node 
  */
 Node getHead(LinkedList list);
-
-/**
- * @brief Set the Head object
- * 
- * @param list 
- * @param head 
- * @return true 
- * @return false 
- */
-bool setHead(LinkedList list, Node head);
 
 /**
  * @brief Get the Current object

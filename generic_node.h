@@ -7,7 +7,7 @@ typedef struct Node_t* Node;
 
 typedef void* NodeData;
 
-typedef void (*deleteNodeDataMethod)(NodeData);
+typedef void (*deleteMethod)(NodeData);
 
 /**
  * @brief Create a Node object
@@ -17,14 +17,14 @@ typedef void (*deleteNodeDataMethod)(NodeData);
  * @param next could be NULL
  * @return Node 
  */
-Node createNode(unsigned int id, NodeData data, deleteNodeDataMethod deleteData, Node next);
+Node createNode(unsigned int id, NodeData data, deleteMethod deleteData, Node next);
 
 /**
  * @brief free node
  * 
  * @param node 
  */
-void deleteNode(Node node, deleteNodeDataMethod dm);
+void deleteNode(Node node);
 
 /**
  * @brief Get the Id object

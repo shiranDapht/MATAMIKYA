@@ -4,15 +4,25 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
+
 struct LinkedList_t{
+    deleteMethod deleteData_t;
     Node head_t;
     Node current_t;
+
 };
+
+//private method
+void setDeleteMethod(LinkedList list, deleteMethod dm){
+    if(list){
+        list->deleteData_t = dm;
+    }
+}
 
 LinkedList createLinkedList(){
 
     LinkedList linked_list = (LinkedList)malloc(sizeof(struct LinkedList_t));
-    Node head = (Node)malloc(sizeof(head));
+    Node head = createNode(0, NULL, NULL, NULL);
     if(!linked_list || !head){
         if (!linked_list){
             deleteNode(head);
@@ -90,11 +100,17 @@ NodeData llGetNext(LinkedList list){
     return getData(next);
 }
 
-bool llAddNode(LinkedList list, Node node){
-    if(!list || !node){
+bool llAddNode(LinkedList list, unsigned int id, NodeData data, deleteMethod deleteData){
+    if(!list || !data || !deleteData){
         return false;
     }
-    if(!setNext(getCurrent(list), node)){
+
+    Node new_node = createNode(id,data, deleteData, NULL);
+    if(!new_node){
+        return false;
+    }
+    if(!setNext(getCurrent(list), new_node)){
+        deleteNode(new_node);
         return false;
     }
     return true;

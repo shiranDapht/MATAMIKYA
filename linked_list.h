@@ -6,6 +6,18 @@
 typedef struct LinkedList_t* LinkedList;
 
 /**
+ * @brief Create a Linked List object
+ * 
+ * @param head 
+ * @param current 
+ * @return LinkedList 
+ */
+LinkedList createLinkedList(Node head, Node current);
+
+void deleteLinkedList(LinkedList list);
+
+
+/**
  * @brief Get the Head object
  * 
  * @param list 
@@ -40,6 +52,39 @@ Node getCurrent(LinkedList list);
  * @return false 
  */
 bool setCurrent(LinkedList list, Node current);
+/**
+ * @brief Resetting iterator
+ * 
+ * @param list 
+ * @return NodeData 
+ */
+NodeData llGetFirst(LinkedList list);
 
+/**
+ * @brief Advances current one step
+ * 
+ * @param list 
+ * @return NodeData 
+ */
+NodeData llGetNext(LinkedList list);
+
+/**
+ * @brief 
+ * 
+ * @param list 
+ * @param node 
+ * @return true 
+ * @return false 
+ */
+bool llAddNode(LinkedList list, Node node);
+
+/*!
+* Macro for iterating over a set.
+* Declares a new iterator for the loop.
+*/
+#define LL_FOREACH(type,iterator,list) \
+  for(type iterator = setGetFirst(list) ; \
+    iterator ;\
+    iterator = setGetNext(list))
 
 #endif

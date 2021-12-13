@@ -2,7 +2,37 @@
 #define GENERIC_NODE_H_
 
 #include <stdbool.h>
+
 typedef struct Node_t* Node;
+
+typedef void* NodeData;
+
+typedef void (*deleteMethod)(NodeData);
+
+/**
+ * @brief Create a Node object
+ * 
+ * @param id 
+ * @param data 
+ * @param next could be NULL
+ * @return Node 
+ */
+Node createNode(unsigned int id, NodeData data, deleteMethod deleteData, Node next);
+
+/**
+ * @brief free node
+ * 
+ * @param node 
+ */
+void deleteNode(Node node);
+
+/**
+ * @brief Get Delete Data Method function pointer
+ * 
+ * @param node 
+ * @return deleteMethod 
+ */
+deleteMethod getDeleteDataMethod(Node node);
 
 /**
  * @brief Get the Id object

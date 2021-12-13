@@ -6,11 +6,26 @@ struct ItemQty_t{
     double amount_t;
 };
 
-unsigned int getId(ItemQty item){
+
+ItemQty createItemQty(unsigned int id, double amount){
+    ItemQty new_item_qty = (ItemQty)malloc(sizeof(struct ItemQty_t));
+    setQtyId(new_item_qty,id);
+    setQtyAmount(new_item_qty,amount);
+    return new_item_qty;
+}
+
+void deleteItemQty(ItemQty item_qty){
+    if(item_qty){
+        free(item_qty);
+    }
+}
+
+
+unsigned int getQtyId(ItemQty item){
     return item->id_t;
 }
 
-bool setId(ItemQty item, unsigned int id){
+bool setQtyId(ItemQty item, unsigned int id){
     if(!item){
         return false;
     }
@@ -18,11 +33,11 @@ bool setId(ItemQty item, unsigned int id){
     return true;
 }
 
-double getAmount(ItemQty item){
+double getQtyAmount(ItemQty item){
     return item->amount_t;
 }
 
-bool setAmount(ItemQty item, double amount){
+bool setQtyAmount(ItemQty item, double amount){
     if(!item){
         return false;
     }

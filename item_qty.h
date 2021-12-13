@@ -4,12 +4,28 @@
 typedef struct ItemQty_t* ItemQty;
 
 /**
+ * @brief Create a Item Qty object
+ * 
+ * @param id 
+ * @param amount 
+ * @return ItemQty 
+ */
+ItemQty createItemQty(unsigned int id, double amount);
+
+/**
+ * @brief 
+ * 
+ * @param item_qty 
+ */
+void deleteItemQty(ItemQty item_qty);
+
+/**
  * @brief Get the Id object
  * 
  * @param item 
  * @return unsigned int 
  */
-unsigned int getId(ItemQty item);
+unsigned int getQtyId(ItemQty item);
 
 /**
  * @brief Set the Id object
@@ -19,7 +35,7 @@ unsigned int getId(ItemQty item);
  * @return true 
  * @return false 
  */
-bool setId(ItemQty item, unsigned int id);
+bool setQtyId(ItemQty item, unsigned int id);
 
 /**
  * @brief Get the Amount object
@@ -27,7 +43,7 @@ bool setId(ItemQty item, unsigned int id);
  * @param item 
  * @return double 
  */
-double getAmount(ItemQty item);
+double getQtyAmount(ItemQty item);
 
 /**
  * @brief Set the Amount object
@@ -37,7 +53,7 @@ double getAmount(ItemQty item);
  * @return true 
  * @return false 
  */
-bool setAmount(ItemQty item, double amount);
+bool setQtyAmount(ItemQty item, double amount);
 
 
 #endif

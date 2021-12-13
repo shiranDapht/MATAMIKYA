@@ -111,7 +111,12 @@ bool llAddNode(LinkedList list, unsigned int id, NodeData data, deleteMethod del
     }
     if(!setNext(getCurrent(list), new_node)){
         deleteNode(new_node);
+
         return false;
     }
     return true;
+}
+
+deleteMethod getDeleteDataMethod(LinkedList list){
+    return list->deleteData_t;
 }

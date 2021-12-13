@@ -74,6 +74,8 @@ NodeData llGetNext(LinkedList list);
  */
 bool llAddNode(LinkedList list, Node node);
 
+deleteMethod getDeleteDataMethod(LinkedList list);
+
 /*!
 * Macro for iterating over a set.
 * Declares a new iterator for the loop.

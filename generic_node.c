@@ -12,15 +12,18 @@ struct Node_t{
     Node next_t;
 };
 
-Node createNode(unsigned int id, NodeData data, deleteMethod deleteData, Node next){
+Node createNode(unsigned int id, NodeData data, Node next){
     Node new_node = (Node)malloc(sizeof(struct Node_t));
     if(!new_node){
         return NULL;
     }
-    setId(new_node,id);
-    setData(new_node,data);
-    setDeleteMethod(new_node,deleteData);
-    setNext(new_node,next);
+    bool i = setId(new_node,id);
+    bool d = setData(new_node,data);
+    bool n = setNext(new_node,next);
+    if(!i || !d || !n){
+        deleteNode(new_node);
+        return NULL;
+    }
     return new_node;
 }
 
@@ -30,11 +33,6 @@ void deleteNode(Node node){
     }
     getDeleteDataMethod(node)(getData(node));
 }
-
-deleteMethod getDeleteDataMethod(Node node){
-    return node->deleteData_t;
-}
-
 
 
 unsigned int getId(Node node){

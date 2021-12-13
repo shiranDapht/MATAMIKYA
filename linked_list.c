@@ -7,6 +7,7 @@
 
 struct LinkedList_t{
     deleteNodeDataMethod deleteData_t;
+    NodeData data;
     Node head_t;
     Node current_t;
 
@@ -19,10 +20,13 @@ void setDeleteMethod(LinkedList list, deleteNodeDataMethod dm){
     }
 }
 
-LinkedList createLinkedList(){
+LinkedList createLinkedList(deleteNodeDataMethod deleteData, NodeData data){
 
+    if(!deleteData || !data){
+        return NULL;
+    }
     LinkedList linked_list = (LinkedList)malloc(sizeof(struct LinkedList_t));
-    Node head = createNode(0, NULL, NULL, NULL);
+    Node head = createNode(0, data, deleteData);
     if(!linked_list || !head){
         if (!linked_list){
             deleteNode(head,getDeleteDataMethod(linked_list));
@@ -46,7 +50,7 @@ void deleteLinkedList(LinkedList list){
     if(!getHead(list)){
         free(list);
     }
-    if(list){
+    else if(list){
         Node current = getNext(getHead(list));
         while (current){
             Node to_delete = current;
@@ -105,7 +109,7 @@ bool llAddNode(LinkedList list, unsigned int id, NodeData data, deleteNodeDataMe
         return false;
     }
 
-    Node new_node = createNode(id,data, deleteData, NULL);
+    Node new_node = createNode(id,data, deleteData);
     if(!new_node){
         return false;
     }
@@ -118,5 +122,8 @@ bool llAddNode(LinkedList list, unsigned int id, NodeData data, deleteNodeDataMe
 }
 
 deleteNodeDataMethod getDeleteDataMethod(LinkedList list){
+    if(!list || !list->deleteData_t){
+        return NULL;
+    }
     return list->deleteData_t;
 }

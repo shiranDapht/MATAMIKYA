@@ -13,7 +13,7 @@ typedef struct LinkedList_t* LinkedList;
  * @param current 
  * @return LinkedList 
  */
-LinkedList createLinkedList();
+LinkedList createLinkedList(deleteNodeDataMethod deleteData, NodeData data);
 
 /**
  * @brief destroy list completely
@@ -68,11 +68,13 @@ NodeData llGetNext(LinkedList list);
  * @brief 
  * 
  * @param list 
- * @param node 
+ * @param id 
+ * @param data 
+ * @param deleteData 
  * @return true 
  * @return false 
  */
-bool llAddNode(LinkedList list, Node node);
+bool llAddNode(LinkedList list, unsigned int id , NodeData data, deleteNodeDataMethod deleteData);
 
 deleteNodeDataMethod getDeleteDataMethod(LinkedList list);
 

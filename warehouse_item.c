@@ -1,23 +1,23 @@
 #include "matamikya_print.h"
-#include "item_data.h"
+#include "warehouse_item.h"
 
 #include<stdlib.h>
 #include <stdbool.h>
 
-#define NULL_ITEM_DATA
+#define NULL_ITEM_DATA -1
+
 struct ItemData_t{
     MtmProductData product_data_t;
     MtmCopyData copy_data_t;
     MtmFreeData free_data_t;
     MtmGetProductPrice product_price_t;
     MatamikyaAmountType units_t;
-    double item_sold_t;
-    double item_in_storage;
+    double in_storage_t;
 };
 
 ItemData createItemData(MtmProductData product_data, MtmCopyData copy_data,
         MtmFreeData free_data, MtmGetProductPrice product_price,
-        MatamikyaAmountType units, double item_sold){
+        MatamikyaAmountType units, double in_storage){
             if(!product_data || !copy_data || !free_data || !product_price 
                 || !units){
                     return NULL;
@@ -33,7 +33,7 @@ ItemData createItemData(MtmProductData product_data, MtmCopyData copy_data,
             bool fd = setFreeData(item_data, free_data);
             bool pp = setProductPrice(item_data, product_price);
             bool u = setUnits(item_data, units);
-            bool is = setItemSold(item_data, item_sold);
+            bool is = setItemInStorage(item_data, in_storage);
 
             if (!pd || !cd || !fd || !pp || !u || !is){
                 deleteItemData(item_data);
@@ -110,38 +110,24 @@ bool setUnits(ItemData item_data, MatamikyaAmountType units){
     return true;
 }
 
-double getItemSold(ItemData item_data){
+double getItemInStorage(ItemData item_data){
     if(!item_data){
         return NULL_ITEM_DATA;
     }
-    return item_data->item_sold_t;
+    return item_data->in_storage_t;
 }
 
-bool setItemSold(ItemData item_data, double item_sold){
+bool setItemInStorage(ItemData item_data, double item_in_storage){
     if(!item_data){
         return false;
     }
-    item_data->item_sold_t = item_sold;
+    item_data->in_storage_t = item_in_storage;
     return true;
 }
 
 double getProductIncome(ItemData item_data){
-    double items_sold = getItemSold(item_data);
+    double items_sold = getItemInStorage(item_data);
     MtmProductData item_product_data = getProductData(item_data);
     return getProductPrice(item_data)(item_product_data,items_sold);
 }
 
-double getInStoreg(ItemData item_data){
-    if(!item_data){
-        return NULL_ITEM_DATA;
-    }
-    return item_data->item_in_storage;
-}
-
-bool setInStoreg(ItemData item_data, double amount){
-    if(!item_data){
-        return false;
-    }
-    item_data->item_in_storage = amount;
-    return true;
-}

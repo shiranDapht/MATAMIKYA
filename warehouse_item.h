@@ -1,5 +1,5 @@
-#ifndef ITEM_DATA_H_
-#define ITEM_DATA_H_
+#ifndef WAREHOUSE_ITEM_H_
+#define WAREHOUSE_ITEM_H_
 
 #include "matamikya.h"
 
@@ -13,12 +13,12 @@ typedef struct ItemData_t* ItemData;
  * @param free_data 
  * @param product_price 
  * @param units 
- * @param item_sold 
+ * @param in_storage 
  * @return ItemData 
  */
 ItemData createItemData(MtmProductData product_data, MtmCopyData copy_data,
         MtmFreeData free_data, MtmGetProductPrice product_price,
-        MatamikyaAmountType units, double item_sold);
+        MatamikyaAmountType units, double in_storage);
 
 /**
  * @brief 
@@ -118,24 +118,6 @@ MatamikyaAmountType getUnits(ItemData item_data);
 bool setUnits(ItemData item_data, MatamikyaAmountType units);
 
 /**
- * @brief Get the Item Sold object
- * 
- * @param item_data 
- * @return double 
- */
-double getItemSold(ItemData item_data);
-
-/**
- * @brief Set the Item Sold object
- * 
- * @param item_data 
- * @param item_sold 
- * @return true 
- * @return false 
- */
-bool setItemSold(ItemData item_data, double item_sold);
-
-/**
  * @brief Get the Product Amount object
  * 
  * @param item_data 
@@ -160,5 +142,23 @@ double getInStoreg(ItemData item_data);
  * @return false 
  */
 bool setInStoreg(ItemData item_data, double amount);
+
+/**
+ * @brief Set the Item In Storage object
+ * 
+ * @param item_data 
+ * @param item_in_storage 
+ * @return true 
+ * @return false 
+ */
+bool setItemInStorage(ItemData item_data, double item_in_storage);
+
+/**
+ * @brief Get the Product Income object
+ * 
+ * @param item_data 
+ * @return double 
+ */
+double getProductIncome(ItemData item_data);
 
 #endif

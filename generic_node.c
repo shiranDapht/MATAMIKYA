@@ -9,16 +9,8 @@
 struct Node_t{
     unsigned int id_t;
     NodeData data_t;
-    deleteMethod deleteData_t;
     Node next_t;
 };
-
-//private method
-void setDeleteMethod(Node node, deleteMethod dm){
-    if(!node){
-        node->deleteData_t = dm;
-    }
-}
 
 Node createNode(unsigned int id, NodeData data, deleteMethod deleteData, Node next){
     Node new_node = (Node)malloc(sizeof(struct Node_t));

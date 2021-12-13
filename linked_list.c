@@ -6,14 +6,14 @@
 
 
 struct LinkedList_t{
-    deleteMethod deleteData_t;
+    deleteNodeDataMethod deleteData_t;
     Node head_t;
     Node current_t;
 
 };
 
 //private method
-void setDeleteMethod(LinkedList list, deleteMethod dm){
+void setDeleteMethod(LinkedList list, deleteNodeDataMethod dm){
     if(list){
         list->deleteData_t = dm;
     }
@@ -25,7 +25,7 @@ LinkedList createLinkedList(){
     Node head = createNode(0, NULL, NULL, NULL);
     if(!linked_list || !head){
         if (!linked_list){
-            deleteNode(head);
+            deleteNode(head,getDeleteDataMethod(linked_list));
         }
         return NULL;
     }
@@ -33,7 +33,7 @@ LinkedList createLinkedList(){
     bool sn = setNext(head, NULL);
     bool sc = setCurrent(linked_list, getNext(head));
     if(!sn || !sc){
-        deleteNode(head);
+        deleteNode(head,getDeleteDataMethod(linked_list));
         deleteLinkedList(linked_list);
     }
     return linked_list;
@@ -51,7 +51,7 @@ void deleteLinkedList(LinkedList list){
         while (current){
             Node to_delete = current;
             current = getNext(current);
-            deleteNode(to_delete);
+            deleteNode(to_delete,getDeleteDataMethod(list));
         }
     }
 }
@@ -100,7 +100,7 @@ NodeData llGetNext(LinkedList list){
     return getData(next);
 }
 
-bool llAddNode(LinkedList list, unsigned int id, NodeData data, deleteMethod deleteData){
+bool llAddNode(LinkedList list, unsigned int id, NodeData data, deleteNodeDataMethod deleteData){
     if(!list || !data || !deleteData){
         return false;
     }
@@ -110,13 +110,13 @@ bool llAddNode(LinkedList list, unsigned int id, NodeData data, deleteMethod del
         return false;
     }
     if(!setNext(getCurrent(list), new_node)){
-        deleteNode(new_node);
+        deleteNode(new_node,getDeleteDataMethod(list));
 
         return false;
     }
     return true;
 }
 
-deleteMethod getDeleteDataMethod(LinkedList list){
+deleteNodeDataMethod getDeleteDataMethod(LinkedList list){
     return list->deleteData_t;
 }

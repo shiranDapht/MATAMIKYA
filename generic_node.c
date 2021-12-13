@@ -29,10 +29,13 @@ Node createNode(unsigned int id, NodeData data, deleteNodeDataMethod deleteData)
 
 void deleteNode(Node node, deleteNodeDataMethod dm){
     if(node){
-        dm(getData(node));
+        if(!getData(node)){
+            dm(getData(node));
+        }
         free(node);
     }
 }
+
 
 
 
@@ -51,6 +54,9 @@ bool setId(Node node, unsigned int id){
 
 NodeData getData(Node node){
     if(!node){
+        return NULL;
+    }
+    if(!node->data_t){
         return NULL;
     }
     return node->data_t;

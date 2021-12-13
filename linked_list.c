@@ -26,11 +26,12 @@ LinkedList createLinkedList(deleteNodeDataMethod deleteData, NodeData data){
         return NULL;
     }
     LinkedList linked_list = (LinkedList)malloc(sizeof(struct LinkedList_t));
+    if(!linked_list){
+        return NULL;
+    }
     Node head = createNode(0, data, deleteData);
-    if(!linked_list || !head){
-        if (!linked_list){
-            deleteNode(head,getDeleteDataMethod(linked_list));
-        }
+    if(!head){
+        deleteNode(head,getDeleteDataMethod(linked_list));
         return NULL;
     }
     linked_list->head_t = head;

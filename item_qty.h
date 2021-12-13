@@ -20,13 +20,6 @@ ItemQty createItemQty(unsigned int id, double amount);
 void deleteItemQty(ItemQty item_qty);
 
 /**
- * @brief 
- * 
- * @param item_qty 
- */
-void printItemQty(ItemQty item_qty);
-
-/**
  * @brief Get the Id object
  * 
  * @param item 

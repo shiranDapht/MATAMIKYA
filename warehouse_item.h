@@ -17,7 +17,7 @@ typedef struct ItemData_t* ItemData;
  * @param in_storage 
  * @return ItemData 
  */
-ItemData createItemData(MtmProductData product_data, MtmCopyData copy_data,
+ItemData createItemData(const char* item_name, MtmProductData product_data, MtmCopyData copy_data,
         MtmFreeData free_data, MtmGetProductPrice product_price,
         MatamikyaAmountType units, double in_storage);
 
@@ -145,16 +145,13 @@ double getItemInStorage(ItemData item_data);
  */
 bool setItemInStorage(ItemData item_data, double item_in_storage);
 
-
 /**
- * @brief Set the Item In Storage object
+ * @brief Get the Item Name object
  * 
  * @param item_data 
- * @param item_in_storage 
- * @return true 
- * @return false 
+ * @return char* 
  */
-bool setItemInStorage(ItemData item_data, double item_in_storage);
+char* getItemName(ItemData item_data);
 
 /**
  * @brief Get the Product Income object

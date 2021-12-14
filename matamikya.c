@@ -2,9 +2,10 @@
 #include "cart_item.h"
 #include "linked_list.h"
 #include "matamikya.h"
+#include "matamikya_print.h"
 
 #include <stdlib.h>
-
+#define MAX_UINT32 0xFFFFFFFF
 struct Matamikya_t{
     LinkedList warehouse_t;
     LinkedList orders_t;
@@ -97,9 +98,15 @@ MatamikyaResult mtmNewProduct(Matamikya matamikya, const unsigned int id, const 
     if(!isAmountConsistene(amount,amountType)){
         return MATAMIKYA_INVALID_AMOUNT;
     }
-
-    bool product_addition_succeed = llAddNode(matamikya->warehouse_t, id, customData, freeData);
+    LinkedList warehouse = matamikya->warehouse_t;
+    ItemData new_product_data = createItemData(name, customData, copyData, freeData, prodPrice, amountType, amount);
+    if(!new_product_data){
+        deleteItemData(new_product_data);
+        return MATAMIKYA_OUT_OF_MEMORY;
+    }
+    bool product_addition_succeed = llAddNode(warehouse, id,new_product_data, deleteItemData);
     if(!product_addition_succeed){
+        deleteItemData(new_product_data);
         return MATAMIKYA_OUT_OF_MEMORY;
     }
     return MATAMIKYA_SUCCESS;
@@ -166,6 +173,9 @@ MatamikyaResult mtmChangeProductAmountInOrder(Matamikya matamikya, const unsigne
     if(!matamikya){
         return MATAMIKYA_NULL_ARGUMENT;
     }
+    if(!isContains(orderId, matamikya->orders_t)){
+        return MATAMIKYA_ORDER_NOT_EXIST;
+    }
     if(amount == 0){
         return MATAMIKYA_SUCCESS;
     }
@@ -196,6 +206,9 @@ MatamikyaResult mtmShipOrder(Matamikya matamikya, const unsigned int orderId){
     if(!matamikya){
         return MATAMIKYA_NULL_ARGUMENT;
     }
+    if(!isContains(orderId, matamikya->orders_t)){
+        return MATAMIKYA_ORDER_NOT_EXIST;
+    }
     LinkedList cart = getDataById(matamikya->orders_t, orderId);
     LL_FOREACH(unsigned int, it, cart){
         CartItem current = getData(getCurrent(cart));
@@ -218,15 +231,47 @@ MatamikyaResult mtmShipOrder(Matamikya matamikya, const unsigned int orderId){
 }   
 
 MatamikyaResult mtmCancelOrder(Matamikya matamikya, const unsigned int orderId){
-
+    if(!matamikya){
+        return MATAMIKYA_NULL_ARGUMENT;
+    }
+    LinkedList orders = matamikya->orders_t;
+    if(!isContains(orderId,orders)){
+        return MATAMIKYA_ORDER_NOT_EXIST;
+    }
+    deleteLinkedList(getDataById(orders, orderId));
+    return MATAMIKYA_SUCCESS;
 }
 
 MatamikyaResult mtmPrintInventory(Matamikya matamikya, FILE *output){
+    if(!matamikya || !output){
+        return MATAMIKYA_NULL_ARGUMENT;
+    }
+    LinkedList warehouse = matamikya->warehouse_t;
+    fprintf(output, "Inventory Status:\n");
+    unsigned int min_id = MAX_UINT32;
+    unsigned int max_id_printed = 0;
 
+    LL_FOREACH(unsigned int, it, warehouse){
+        LL_FOREACH(unsigned int, it_min, warehouse){
+            if(it_min >= max_id_printed && it_min < min_id){
+                min_id = it_min;
+            }
+        }
+        max_id_printed = min_id + 1;
+        ItemData product = getData(getCurrent(warehouse));
+        double price_per_unit = getProductPrice(product)(getProductData(product),1);
+        mtmPrintProductDetails(getItemName(product),min_id,getItemInStorage(product),price_per_unit,output);
+    }
+    return MATAMIKYA_SUCCESS;
 }
 
 MatamikyaResult mtmPrintOrder(Matamikya matamikya, const unsigned int orderId, FILE *output){
-
+    if(!matamikya || !output){
+        return MATAMIKYA_NULL_ARGUMENT;
+    }
+    fprintf(output, "Order %d Details:\n", orderId);
+    LinkedList orders = matamikya->orders_t;
+    
 }
 
 MatamikyaResult mtmPrintBestSelling(Matamikya matamikya, FILE *output){

@@ -1,12 +1,14 @@
 #include "matamikya_print.h"
 #include "warehouse_item.h"
 
-#include<stdlib.h>
+#include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 
 #define NULL_ITEM_DATA -1
 
 struct ItemData_t{
+    char* item_name_t;
     MtmProductData product_data_t;
     MtmCopyData copy_data_t;
     MtmFreeData free_data_t;
@@ -16,10 +18,10 @@ struct ItemData_t{
     double in_storage_t;
 };
 
-ItemData createItemData(MtmProductData product_data, MtmCopyData copy_data,
+ItemData createItemData(const char* item_name, MtmProductData product_data, MtmCopyData copy_data,
         MtmFreeData free_data, MtmGetProductPrice product_price,
         MatamikyaAmountType units, double in_storage){
-            if(!product_data || !copy_data || !free_data || !product_price 
+            if(!item_name || !product_data || !copy_data || !free_data || !product_price 
                 || !units){
                     return NULL;
                 }
@@ -28,7 +30,10 @@ ItemData createItemData(MtmProductData product_data, MtmCopyData copy_data,
             if(!item_data){
                 return NULL;
             }
-
+            char* new_name = (char*)malloc(sizeof(item_name)+1);
+            strcpy(new_name,item_name);
+            item_data->item_name_t = new_name;
+            item_data->income_t = 0;
             bool pd = setProductData(item_data, product_data);
             bool cd = setCopyData(item_data, copy_data);
             bool fd = setFreeData(item_data, free_data);
@@ -44,9 +49,16 @@ ItemData createItemData(MtmProductData product_data, MtmCopyData copy_data,
             return item_data;
 }
         
+char* getItemName(ItemData item_data){
+    if(item_data){
+        return item_data->item_name_t;
+    }
+    return NULL;
+}
 
 void deleteItemData(void* item_data){
     if(item_data){
+        free(((ItemData)item_data)->item_name_t);
         getFreeData(item_data)(getProductData(item_data));
         free(item_data);
     }
@@ -136,3 +148,4 @@ void changeProductIncome(ItemData item_data, double item_amount){
     double income = getProductPrice(item_data)(getProductData(item_data), item_amount);
     item_data->income_t = getProductIncome(item_data) + income;
 }
+

@@ -29,9 +29,12 @@ LinkedList createLinkedList(deleteNodeDataMethod deleteData, NodeData data){
     if(!linked_list){
         return NULL;
     }
+    setDeleteMethod(linked_list,deleteData);
     Node head = createNode(0, data, deleteData);
     if(!head){
+
         deleteNode(head,getDeleteDataMethod(linked_list));
+        free(linked_list);
         return NULL;
     }
     linked_list->head_t = head;
@@ -123,7 +126,7 @@ bool llAddNode(LinkedList list, unsigned int id, NodeData data, deleteNodeDataMe
 }
 
 deleteNodeDataMethod getDeleteDataMethod(LinkedList list){
-    if(!list || !list->deleteData_t){
+    if(!list){
         return NULL;
     }
     return list->deleteData_t;

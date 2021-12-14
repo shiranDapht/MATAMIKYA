@@ -139,7 +139,7 @@ unsigned int mtmCreateNewOrder(Matamikya matamikya){
 
 }
 
-MatamikyaResult mtmChangeProductAmountInOrder(Matamikya, const unsigned int orderId,
+MatamikyaResult mtmChangeProductAmountInOrder(Matamikya matamikya, const unsigned int orderId,
                                      const unsigned int productId, const double amount){
 
                                      }

@@ -193,7 +193,28 @@ MatamikyaResult mtmChangeProductAmountInOrder(Matamikya matamikya, const unsigne
 }
 
 MatamikyaResult mtmShipOrder(Matamikya matamikya, const unsigned int orderId){
+    if(!matamikya){
+        return MATAMIKYA_NULL_ARGUMENT;
+    }
+    LinkedList cart = getDataById(matamikya->orders_t, orderId);
+    LL_FOREACH(unsigned int, it, cart){
+        CartItem current = getData(getCurrent(cart));
+        ItemData current_in_warehouse = getDataById(matamikya->warehouse_t, it);
+        if(getCartItemAmount(current) > getItemInStorage(current_in_warehouse)){
+            return MATAMIKYA_INSUFFICIENT_AMOUNT;
+        }
+    }
 
+    LL_FOREACH(unsigned int, it, cart){
+        ItemData current_in_warehouse = getDataById(matamikya->warehouse_t, it);
+        double current_amount = getCartItemAmount(getData(getCurrent(cart)));
+        double warehouse_amount = getItemInStorage(current_in_warehouse);
+        double new_amount = warehouse_amount - current_amount;
+        mtmChangeProductAmount(matamikya, it, new_amount);
+        changeProductIncome(current_in_warehouse, current_amount);
+    }
+    mtmCancelOrder(matamikya, orderId);
+    return MATAMIKYA_SUCCESS;
 }   
 
 MatamikyaResult mtmCancelOrder(Matamikya matamikya, const unsigned int orderId){

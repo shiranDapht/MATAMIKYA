@@ -164,4 +164,11 @@ bool setItemInStorage(ItemData item_data, double item_in_storage);
  */
 double getProductIncome(ItemData item_data);
 
+/**
+ * @brief 
+ * 
+ * @param item_data 
+ */
+void changeProductIncome(ItemData item_data, double item_amount);
+
 #endif

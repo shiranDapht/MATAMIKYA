@@ -12,6 +12,7 @@ struct ItemData_t{
     MtmFreeData free_data_t;
     MtmGetProductPrice product_price_t;
     MatamikyaAmountType units_t;
+    double income_t;
     double in_storage_t;
 };
 
@@ -126,9 +127,12 @@ bool setItemInStorage(ItemData item_data, double item_in_storage){
     return true;
 }
 
+
 double getProductIncome(ItemData item_data){
-    double items_sold = getItemInStorage(item_data);
-    MtmProductData item_product_data = getProductData(item_data);
-    return getProductPrice(item_data)(item_product_data,items_sold);
+    return item_data->income_t;
 }
 
+void changeProductIncome(ItemData item_data, double item_amount){
+    double income = getProductPrice(item_data)(getProductData(item_data), item_amount);
+    item_data->income_t = getProductIncome(item_data) + income;
+}

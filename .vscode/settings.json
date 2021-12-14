@@ -9,6 +9,7 @@
         "amount_set_str.c": "cpp",
         "warehouse_item.h": "c",
         "linked_list.h": "c",
-        "cart_item.h": "c"
+        "cart_item.h": "c",
+        "stdlib.h": "c"
     }
 }

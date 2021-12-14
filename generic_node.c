@@ -3,9 +3,6 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-
-
-
 struct Node_t{
     unsigned int id_t;
     NodeData data_t;

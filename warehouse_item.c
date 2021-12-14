@@ -41,9 +41,10 @@ ItemData createItemData(MtmProductData product_data, MtmCopyData copy_data,
             }
 
             return item_data;
-        }
+}
+        
 
-void deleteItemData(ItemData item_data){
+void deleteItemData(void* item_data){
     if(item_data){
         getFreeData(item_data)(getProductData(item_data));
         free(item_data);

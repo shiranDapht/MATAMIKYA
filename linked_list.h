@@ -20,8 +20,15 @@ LinkedList createLinkedList(deleteNodeDataMethod deleteData);
  * 
  * @param list 
  */
-void deleteLinkedList(LinkedList list);
+void deleteLinkedList(void* list);
 
+/**
+ * @brief removes and deletes a node from a list by its id
+ * 
+ * @param list 
+ * @param id 
+ */
+void deleteNodeById(LinkedList list, unsigned int id);
 
 /**
  * @brief Get the Head object
@@ -76,6 +83,29 @@ unsigned int llGetNext(LinkedList list);
  */
 bool llAddNode(LinkedList list, unsigned int id , NodeData data, deleteNodeDataMethod deleteData);
 
+/**
+ * @brief Get the List Node By Id
+ * 
+ * @param list 
+ * @param id 
+ * @return Data member of Node, NULL if id does not exist
+ */
+NodeData getDataById(LinkedList list, unsigned int id);
+
+/**
+ * @brief makes new unique id
+ * 
+ * @param list 
+ * @return unsigned int 
+ */
+unsigned int makeNewListNodeId(LinkedList list);
+
+/**
+ * @brief Get the Delete Data Method
+ * 
+ * @param list 
+ * @return deleteNodeDataMethod 
+ */
 deleteNodeDataMethod getDeleteDataMethod(LinkedList list);
 
 /*!
@@ -83,8 +113,8 @@ deleteNodeDataMethod getDeleteDataMethod(LinkedList list);
 * Declares a new iterator for the loop.
 */
 #define LL_FOREACH(type,iterator,list) \
-  for(type iterator = setGetFirst(list) ; \
+  for(type iterator = llGetFirst(list) ; \
     iterator ;\
-    iterator = setGetNext(list))
+    iterator = llGetNext(list))
 
 #endif

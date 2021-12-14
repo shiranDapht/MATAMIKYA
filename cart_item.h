@@ -17,7 +17,7 @@ CartItem createCartItem(unsigned int id, double amount);
  * 
  * @param item_qty 
  */
-void deleteCartItem(CartItem item_qty);
+void deleteCartItem(void* item_qty);
 
 /**
  * @brief Get the Id object

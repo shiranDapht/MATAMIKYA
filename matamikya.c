@@ -45,8 +45,18 @@ bool isNameValid(const char* name){
     return (num || A_Z || a_z);
 }
 
-bool isAmountConsistene(const double amount, const MatamikyaAmountType amountType){
+bool isAmountConsistene(const double amount, const MatamikyaAmountType amountType);
 
+bool isContains(unsigned int id, LinkedList list){
+    if(!list){
+        return false;
+    }
+    LL_FOREACH(unsigned int, it, list){
+        if(it == id){
+            return true;
+        }
+    }
+    return false;
 }
 
 MatamikyaResult mtmNewProduct(Matamikya matamikya, const unsigned int id, const char *name,
@@ -58,10 +68,8 @@ MatamikyaResult mtmNewProduct(Matamikya matamikya, const unsigned int id, const 
                                         || !freeData  || !prodPrice){
                                        return MATAMIKYA_NULL_ARGUMENT;     
                                 }
-                                LL_FOREACH(unsigned int, it, matamikya->warehouse_t){
-                                    if(it == id){
-                                        return MATAMIKYA_PRODUCT_ALREADY_EXIST;
-                                    }
+                                if(isContains(id, matamikya->orders_t)){
+                                    return MATAMIKYA_PRODUCT_ALREADY_EXIST;
                                 }
                                 if(!isNameValid(name)){
                                     return MATAMIKYA_INVALID_NAME;
@@ -77,12 +85,54 @@ MatamikyaResult mtmNewProduct(Matamikya matamikya, const unsigned int id, const 
                                 return MATAMIKYA_SUCCESS;
                               }
 
-MatamikyaResult mtmChangeProductAmount(Matamikya matamikya, const unsigned int id, const double amount){
 
+MatamikyaAmountType amountSelector(const double amount);
+
+bool isAmountValid(MatamikyaAmountType amount_in_warehouse, MatamikyaAmountType amount);
+
+MatamikyaResult mtmChangeProductAmount(Matamikya matamikya, const unsigned int id, const double amount){
+    if(!matamikya){
+        return MATAMIKYA_NULL_ARGUMENT;
+    }
+    LinkedList orders = matamikya->orders_t;
+    Node change_amount_node = getHead(orders);
+    if(!isContains(id, orders)){
+        return MATAMIKYA_PRODUCT_NOT_EXIST;
+    }
+    LL_FOREACH(unsigned int, it, orders){
+        if(it == id){
+            change_amount_node = getCurrent(orders);
+            //TODO: amountSelector func
+            //TODO: isAmountValid func
+            MatamikyaAmountType amount_in_warehouse = getUnits(getData(change_amount_node));
+            MatamikyaAmountType units = amountSelector(amount);
+            if(units == amount_in_warehouse){
+                double new_amount = getInStoreg(getData(change_amount_node));
+                if(new_amount += amount > 0){
+                    setInStoreg(getData(change_amount_node) ,new_amount);
+                    return MATAMIKYA_SUCCESS;
+                }
+                return MATAMIKYA_INSUFFICIENT_AMOUNT;
+            }
+            return MATAMIKYA_INVALID_AMOUNT;
+        }
+    }
 }
 
 MatamikyaResult mtmClearProduct(Matamikya matamikya, const unsigned int id){
-
+    if(!matamikya){
+        return MATAMIKYA_NULL_ARGUMENT;
+    }
+    LinkedList orders = matamikya->orders_t;
+    if(!isContains(id, orders)){
+        return MATAMIKYA_PRODUCT_NOT_EXIST;
+    }
+    LL_FOREACH(unsigned int , it, orders){
+        if(id == it){
+            deleteNode(getCurrent(orders), getDeleteDataMethod(orders));
+            return MATAMIKYA_SUCCESS;
+        }
+    }
 }
 
 unsigned int mtmCreateNewOrder(Matamikya matamikya){

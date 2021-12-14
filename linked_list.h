@@ -49,20 +49,20 @@ Node getCurrent(LinkedList list);
  */
 bool setCurrent(LinkedList list, Node current);
 /**
- * @brief Resetting iterator
+ * @brief 
  * 
  * @param list 
- * @return NodeData 
+ * @return unsigned int 
  */
-NodeData llGetFirst(LinkedList list);
+unsigned int llGetFirst(LinkedList list);
 
 /**
- * @brief Advances current one step
+ * @brief 
  * 
  * @param list 
- * @return NodeData 
+ * @return unsigned int 
  */
-NodeData llGetNext(LinkedList list);
+unsigned int llGetNext(LinkedList list);
 
 /**
  * @brief 

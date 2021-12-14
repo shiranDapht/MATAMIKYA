@@ -77,7 +77,7 @@ bool setCurrent(LinkedList list, Node current){
     return true;
 }
 
-NodeData llGetFirst(LinkedList list){
+unsigned int llGetFirst(LinkedList list){
     if(!list){
         return NULL;
     }
@@ -88,10 +88,10 @@ NodeData llGetFirst(LinkedList list){
     if(!setCurrent(list, first)){
         return NULL;
     }
-    return getData(first);
+    return getId(first);
 }
 
-NodeData llGetNext(LinkedList list){
+unsigned int llGetNext(LinkedList list){
     if(!list){
         return NULL;
     }
@@ -102,7 +102,7 @@ NodeData llGetNext(LinkedList list){
     if(!setCurrent(list, next)){
         return NULL;
     }
-    return getData(next);
+    return getId(next);
 }
 
 bool llAddNode(LinkedList list, unsigned int id, NodeData data, deleteNodeDataMethod deleteData){

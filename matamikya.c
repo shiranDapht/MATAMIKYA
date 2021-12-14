@@ -15,12 +15,12 @@ Matamikya matamikyaCreate(){
     if(!new_matamikya){
         return NULL;
     }
-    LinkedList waerhouse = (LinkedList)malloc(sizeof(waerhouse));
+    LinkedList waerhouse = createLinkedList(deleteItemData);
     if(!waerhouse){
         free(new_matamikya);
         return NULL;
     }
-    LinkedList orders = (LinkedList)malloc(sizeof(orders));
+    LinkedList orders = createLinkedList(deleteCartItem);
     if(!orders){
         free(new_matamikya);
         return NULL;

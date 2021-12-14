@@ -13,7 +13,7 @@ typedef struct LinkedList_t* LinkedList;
  * @param current 
  * @return LinkedList 
  */
-LinkedList createLinkedList(deleteNodeDataMethod deleteData, NodeData data);
+LinkedList createLinkedList(deleteNodeDataMethod deleteData);
 
 /**
  * @brief destroy list completely

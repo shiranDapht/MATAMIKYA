@@ -20,9 +20,9 @@ void setDeleteMethod(LinkedList list, deleteNodeDataMethod dm){
     }
 }
 
-LinkedList createLinkedList(deleteNodeDataMethod deleteData, NodeData data){
+LinkedList createLinkedList(deleteNodeDataMethod deleteData){
 
-    if(!deleteData || !data){
+    if(!deleteData){
         return NULL;
     }
     LinkedList linked_list = (LinkedList)malloc(sizeof(struct LinkedList_t));
@@ -30,7 +30,7 @@ LinkedList createLinkedList(deleteNodeDataMethod deleteData, NodeData data){
         return NULL;
     }
     setDeleteMethod(linked_list,deleteData);
-    Node head = createNode(0, data, deleteData);
+    Node head = createNode(0, NULL, deleteData);
     if(!head){
 
         deleteNode(head,getDeleteDataMethod(linked_list));

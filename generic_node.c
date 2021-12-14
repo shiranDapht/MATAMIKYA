@@ -61,6 +61,7 @@ NodeData getData(Node node){
 
 bool setData(Node node, NodeData data){
     if(!node || !data){
+        node->data_t = NULL;
         return false;
     }
     node->data_t = data;

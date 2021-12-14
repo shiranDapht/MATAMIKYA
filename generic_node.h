@@ -17,7 +17,7 @@ typedef void (*deleteMethod)(NodeData);
  * @param next could be NULL
  * @return Node 
  */
-Node createNode(unsigned int id, NodeData data, deleteMethod deleteData, Node next);
+Node createNode(unsigned int id, NodeData data, deleteNodeDataMethod deleteData);
 
 /**
  * @brief free node

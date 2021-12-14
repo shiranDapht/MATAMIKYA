@@ -1,7 +1,7 @@
-#ifndef ITEM_QTY_H_
-#define ITEM_QTY_H_
+#ifndef CART_ITEM_H_
+#define CART_ITEM_H_
 #include <stdbool.h>
-typedef struct ItemQty_t* ItemQty;
+typedef struct CartItem_t* CartItem;
 
 /**
  * @brief Create a Item Qty object
@@ -10,14 +10,14 @@ typedef struct ItemQty_t* ItemQty;
  * @param amount 
  * @return ItemQty 
  */
-ItemQty createItemQty(unsigned int id, double amount);
+CartItem createCartItem(unsigned int id, double amount);
 
 /**
  * @brief 
  * 
  * @param item_qty 
  */
-void deleteItemQty(ItemQty item_qty);
+void deleteCartItem(CartItem item_qty);
 
 /**
  * @brief Get the Id object
@@ -25,7 +25,7 @@ void deleteItemQty(ItemQty item_qty);
  * @param item 
  * @return unsigned int 
  */
-unsigned int getQtyId(ItemQty item);
+unsigned int getCartItemId(CartItem item);
 
 /**
  * @brief Set the Id object
@@ -35,7 +35,7 @@ unsigned int getQtyId(ItemQty item);
  * @return true 
  * @return false 
  */
-bool setQtyId(ItemQty item, unsigned int id);
+bool setCartItemId(CartItem item, unsigned int id);
 
 /**
  * @brief Get the Amount object
@@ -43,7 +43,7 @@ bool setQtyId(ItemQty item, unsigned int id);
  * @param item 
  * @return double 
  */
-double getQtyAmount(ItemQty item);
+double getCartItemAmount(CartItem item);
 
 /**
  * @brief Set the Amount object
@@ -53,7 +53,7 @@ double getQtyAmount(ItemQty item);
  * @return true 
  * @return false 
  */
-bool setQtyAmount(ItemQty item, double amount);
+bool setCartItemAmount(CartItem item, double amount);
 
 
 #endif

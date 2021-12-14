@@ -13,7 +13,7 @@ typedef struct LinkedList_t* LinkedList;
  * @param current 
  * @return LinkedList 
  */
-LinkedList createLinkedList();
+LinkedList createLinkedList(deleteNodeDataMethod deleteData, NodeData data);
 
 /**
  * @brief destroy list completely
@@ -49,30 +49,32 @@ Node getCurrent(LinkedList list);
  */
 bool setCurrent(LinkedList list, Node current);
 /**
- * @brief Resetting iterator
+ * @brief 
  * 
  * @param list 
- * @return NodeData 
+ * @return unsigned int 
  */
-NodeData llGetFirst(LinkedList list);
-
-/**
- * @brief Advances current one step
- * 
- * @param list 
- * @return NodeData 
- */
-NodeData llGetNext(LinkedList list);
+unsigned int llGetFirst(LinkedList list);
 
 /**
  * @brief 
  * 
  * @param list 
- * @param node 
+ * @return unsigned int 
+ */
+unsigned int llGetNext(LinkedList list);
+
+/**
+ * @brief 
+ * 
+ * @param list 
+ * @param id 
+ * @param data 
+ * @param deleteData 
  * @return true 
  * @return false 
  */
-bool llAddNode(LinkedList list, Node node);
+bool llAddNode(LinkedList list, unsigned int id , NodeData data, deleteNodeDataMethod deleteData);
 
 deleteNodeDataMethod getDeleteDataMethod(LinkedList list);
 

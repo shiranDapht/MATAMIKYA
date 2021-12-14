@@ -20,18 +20,21 @@ void setDeleteMethod(LinkedList list, deleteNodeDataMethod dm){
     }
 }
 
-LinkedList createLinkedList(deleteNodeDataMethod deleteData, NodeData data){
+LinkedList createLinkedList(deleteNodeDataMethod deleteData){
 
-    if(!deleteData || !data){
+    if(!deleteData){
         return NULL;
     }
     LinkedList linked_list = (LinkedList)malloc(sizeof(struct LinkedList_t));
     if(!linked_list){
         return NULL;
     }
-    Node head = createNode(0, data, deleteData);
+    setDeleteMethod(linked_list,deleteData);
+    Node head = createNode(0, NULL, deleteData);
     if(!head){
+
         deleteNode(head,getDeleteDataMethod(linked_list));
+        free(linked_list);
         return NULL;
     }
     linked_list->head_t = head;
@@ -44,20 +47,23 @@ LinkedList createLinkedList(deleteNodeDataMethod deleteData, NodeData data){
     return linked_list;
 }
 
-void deleteLinkedList(LinkedList list){
+void deleteLinkedList(void* list){
     if(!list){
         return;
     }
     if(!getHead(list)){
         free(list);
     }
-    else if(list){
+    /*else if(list){
         Node current = getNext(getHead(list));
         while (current){
             Node to_delete = current;
             current = getNext(current);
             deleteNode(to_delete,getDeleteDataMethod(list));
         }
+    }*/
+    LL_FOREACH(unsigned int, it, list){
+        deleteNodeById(list, it);
     }
 }
 
@@ -122,9 +128,43 @@ bool llAddNode(LinkedList list, unsigned int id, NodeData data, deleteNodeDataMe
     return true;
 }
 
+unsigned int makeNewListNodeId(LinkedList list){
+    int max = 0;
+    LL_FOREACH(unsigned int, it, list){
+        if(it > max){
+            max = it;
+        }
+    }
+    return max + 1;
+}
+
+NodeData getDataById(LinkedList list, unsigned int id){
+    LL_FOREACH(unsigned int, it, list){
+        if(it == id){
+            return getData(getCurrent(list));
+        }
+    }
+    return NULL;
+}
+
 deleteNodeDataMethod getDeleteDataMethod(LinkedList list){
-    if(!list || !list->deleteData_t){
+    if(!list){
         return NULL;
     }
     return list->deleteData_t;
+}
+
+void deleteNodeById(LinkedList list, unsigned int id){
+    if(list){
+        Node previus = getHead(list);
+        LL_FOREACH(unsigned int, it, list){
+            if(it == id){
+                Node to_delete = getCurrent(list);
+                setNext(previus,getNext(to_delete));
+                deleteNode(to_delete, getDeleteDataMethod(list));
+                return;
+            }
+            previus = getCurrent(list);
+        }
+    }
 }

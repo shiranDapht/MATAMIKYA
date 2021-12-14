@@ -1,5 +1,8 @@
 #include "node_set.h"
 #include "amount_set_str.h"
+
+#include <string.h>
+
 struct node_t{
     char* itemName_t;
     double amount_t;

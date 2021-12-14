@@ -3,6 +3,7 @@
 
 #include "matamikya.h"
 
+
 typedef struct ItemData_t* ItemData;
 
 /**
@@ -16,7 +17,7 @@ typedef struct ItemData_t* ItemData;
  * @param in_storage 
  * @return ItemData 
  */
-ItemData createItemData(MtmProductData product_data, MtmCopyData copy_data,
+ItemData createItemData(const char* item_name, MtmProductData product_data, MtmCopyData copy_data,
         MtmFreeData free_data, MtmGetProductPrice product_price,
         MatamikyaAmountType units, double in_storage);
 
@@ -25,7 +26,7 @@ ItemData createItemData(MtmProductData product_data, MtmCopyData copy_data,
  * 
  * @param item_data 
  */
-void deleteItemData(ItemData item_data);
+void deleteItemData(void* item_data);
 
 /**
  * @brief Get the Product Data object
@@ -126,22 +127,13 @@ bool setUnits(ItemData item_data, MatamikyaAmountType units);
 double getProductIncome(ItemData item_data);
 
 /**
- * @brief Get the In Storeg object
+ * @brief Get the Item In Storage object
  * 
  * @param item_data 
  * @return double 
  */
-double getInStoreg(ItemData item_data);
+double getItemInStorage(ItemData item_data);
 
-/**
- * @brief Set the In Storeg object
- * 
- * @param item_data 
- * @param amount 
- * @return true 
- * @return false 
- */
-bool setInStoreg(ItemData item_data, double amount);
 
 /**
  * @brief Set the Item In Storage object
@@ -154,11 +146,26 @@ bool setInStoreg(ItemData item_data, double amount);
 bool setItemInStorage(ItemData item_data, double item_in_storage);
 
 /**
+ * @brief Get the Item Name object
+ * 
+ * @param item_data 
+ * @return char* 
+ */
+char* getItemName(ItemData item_data);
+
+/**
  * @brief Get the Product Income object
  * 
  * @param item_data 
  * @return double 
  */
 double getProductIncome(ItemData item_data);
+
+/**
+ * @brief 
+ * 
+ * @param item_data 
+ */
+void changeProductIncome(ItemData item_data, double item_amount);
 
 #endif

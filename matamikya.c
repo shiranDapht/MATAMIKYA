@@ -247,7 +247,7 @@ MatamikyaResult mtmPrintInventory(Matamikya matamikya, FILE *output){
         return MATAMIKYA_NULL_ARGUMENT;
     }
     LinkedList warehouse = matamikya->warehouse_t;
-    fprintf(output, "Inventory Status:\n");
+    /*fprintf(output, "Inventory Status:\n");
     unsigned int min_id = MAX_UINT32;
     unsigned int max_id_printed = 0;
 
@@ -262,6 +262,22 @@ MatamikyaResult mtmPrintInventory(Matamikya matamikya, FILE *output){
         double price_per_unit = getProductPrice(product)(getProductData(product),1);
         mtmPrintProductDetails(getItemName(product),min_id,getItemInStorage(product),price_per_unit,output);
     }
+    */
+    int max_id = 0;
+    LL_FOREACH(unsigned int, it, warehouse){
+        if(it > max_id){
+            max_id = it;
+        }
+    }
+
+    for(int i = 0; i <= max_id; i++){
+        ItemData product = getDataById(warehouse,i);
+        if(product){
+            double price_per_unit = getProductPrice(product)(getProductData(product), 1);
+            mtmPrintProductDetails(getItemName(product),i , getItemInStorage(product), price_per_unit,output);
+        }
+    }
+
     return MATAMIKYA_SUCCESS;
 }
 
@@ -274,6 +290,22 @@ MatamikyaResult mtmPrintOrder(Matamikya matamikya, const unsigned int orderId, F
     }
     mtmPrintOrderHeading(orderId, output);
     LinkedList cart = getDataById(matamikya->orders_t, orderId);
+    int max_id = 0;
+    LL_FOREACH(unsigned int, it, cart){
+        if(it > max_id){
+            max_id = it;
+        }
+    }
+    double total_price = 0;
+    for(int i=0;i<=max_id;i++){
+        CartItem product = getDataById(cart, i);
+        ItemData product_in_warehouse = getDataById(matamikya->warehouse_t,i);
+        double amount = getCartItemAmount(product);
+        double price = getProductPrice(product_in_warehouse)(getProductData(product_in_warehouse),amount);
+        mtmPrintProductDetails(getItemName(product_in_warehouse),i,amount,price,output);
+        total_price += price;
+    }
+/*
     unsigned int min_id = MAX_UINT32;
     unsigned int max_id_printed = 0;
     int total_price = 0;
@@ -291,6 +323,7 @@ MatamikyaResult mtmPrintOrder(Matamikya matamikya, const unsigned int orderId, F
         total_price += price;
         mtmPrintProductDetails(getItemName(product_in_warehouse),min_id,amount,price,output);
     }
+    */
     mtmPrintOrderSummary(total_price, output);
     return MATAMIKYA_SUCCESS;
 }

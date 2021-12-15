@@ -209,19 +209,19 @@ MatamikyaResult mtmShipOrder(Matamikya matamikya, const unsigned int orderId){
     LinkedList cart = getDataById(matamikya->orders_t, orderId);
     LL_FOREACH(unsigned int, it, cart){
         CartItem current = getData(getCurrent(cart));
-        ItemData current_in_warehouse = getDataById(matamikya->warehouse_t, it);
-        if(getCartItemAmount(current) > getItemInStorage(current_in_warehouse)){
+        ItemData item_in_warehouse = getDataById(matamikya->warehouse_t, it);
+        if(getCartItemAmount(current) > getItemInStorage(item_in_warehouse)){
             return MATAMIKYA_INSUFFICIENT_AMOUNT;
         }
     }
 
     LL_FOREACH(unsigned int, it, cart){
-        ItemData current_in_warehouse = getDataById(matamikya->warehouse_t, it);
-        double current_amount = getCartItemAmount(getData(getCurrent(cart)));
-        double warehouse_amount = getItemInStorage(current_in_warehouse);
-        double new_amount = warehouse_amount - current_amount;
-        mtmChangeProductAmount(matamikya, it, new_amount);
-        changeProductIncome(current_in_warehouse, current_amount);
+        ItemData item_in_warehouse = getDataById(matamikya->warehouse_t, it);
+        double current_amount_in_cart = getCartItemAmount(getData(getCurrent(cart)));
+        double warehouse_amount = getItemInStorage(item_in_warehouse);
+        double new_amount_in_warehouse = warehouse_amount - current_amount_in_cart;
+        mtmChangeProductAmount(matamikya, it, new_amount_in_warehouse);
+        changeProductIncome(item_in_warehouse, current_amount_in_cart);
     }
     mtmCancelOrder(matamikya, orderId);
     return MATAMIKYA_SUCCESS;
@@ -244,22 +244,6 @@ MatamikyaResult mtmPrintInventory(Matamikya matamikya, FILE *output){
         return MATAMIKYA_NULL_ARGUMENT;
     }
     LinkedList warehouse = matamikya->warehouse_t;
-    /*fprintf(output, "Inventory Status:\n");
-    unsigned int min_id = MAX_UINT32;
-    unsigned int max_id_printed = 0;
-
-    LL_FOREACH(unsigned int, it, warehouse){
-        LL_FOREACH(unsigned int, it_min, warehouse){
-            if(it_min >= max_id_printed && it_min < min_id){
-                min_id = it_min;
-            }
-        }
-        max_id_printed = min_id + 1;
-        ItemData product = getData(getCurrent(warehouse));
-        double price_per_unit = getProductPrice(product)(getProductData(product),1);
-        mtmPrintProductDetails(getItemName(product),min_id,getItemInStorage(product),price_per_unit,output);
-    }
-    */
     int max_id = 0;
     LL_FOREACH(unsigned int, it, warehouse){
         if(it > max_id){
@@ -271,7 +255,7 @@ MatamikyaResult mtmPrintInventory(Matamikya matamikya, FILE *output){
         ItemData product = getDataById(warehouse,i);
         if(product){
             double price_per_unit = getProductPrice(product)(getProductData(product), 1);
-            mtmPrintProductDetails(getItemName(product),i , getItemInStorage(product), price_per_unit,output);
+            mtmPrintProductDetails(getItemName(product), i, getItemInStorage(product), price_per_unit, output);
         }
     }
 
@@ -302,25 +286,7 @@ MatamikyaResult mtmPrintOrder(Matamikya matamikya, const unsigned int orderId, F
         mtmPrintProductDetails(getItemName(product_in_warehouse),i,amount,price,output);
         total_price += price;
     }
-/*
-    unsigned int min_id = MAX_UINT32;
-    unsigned int max_id_printed = 0;
-    int total_price = 0;
-    LL_FOREACH(unsigned int, it, cart){
-        LL_FOREACH(unsigned int, it_min, cart){
-            if(it_min >= max_id_printed && it_min < min_id){
-                min_id = it_min;
-            }
-        }
-        max_id_printed = min_id + 1;
-        CartItem product = getData(getCurrent(cart));
-        ItemData product_in_warehouse = getDataById(matamikya->warehouse_t,getCartItemId(product));
-        double amount = getCartItemAmount(product);
-        double price = getProductPrice(product_in_warehouse)(getProductData(product_in_warehouse),amount);
-        total_price += price;
-        mtmPrintProductDetails(getItemName(product_in_warehouse),min_id,amount,price,output);
-    }
-    */
+
     mtmPrintOrderSummary(total_price, output);
     return MATAMIKYA_SUCCESS;
 }
@@ -333,7 +299,7 @@ MatamikyaResult mtmPrintBestSelling(Matamikya matamikya, FILE *output){
     bool no_sales = true;
     LL_FOREACH(unsigned int, it, warehouse){
         ItemData current_data = getData(getCurrent(warehouse));
-        if(getProductIncome(current_data) != 0){
+        if(getProductIncome(current_data) <= 0){
             no_sales = false;
             break;
         }

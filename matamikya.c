@@ -5,6 +5,7 @@
 #include "matamikya_print.h"
 
 #include <stdlib.h>
+
 #define MAX_UINT32 0xFFFFFFFF
 struct Matamikya_t{
     LinkedList warehouse_t;
@@ -12,7 +13,6 @@ struct Matamikya_t{
 };
 
 MatamikyaAmountType amountSelector(const double amount){
-    // return (amount != (int)amount) + (amount*2 != (int)(amount*2));
     if(amount != (int)amount){
         if(amount*2 != (int)(amount*2)){
             return MATAMIKYA_ANY_AMOUNT;
@@ -22,7 +22,7 @@ MatamikyaAmountType amountSelector(const double amount){
     return MATAMIKYA_INTEGER_AMOUNT;
 }
 
-bool isAmountConsistene(const double amount, const MatamikyaAmountType amountType){
+bool isAmountContains(const double amount, const MatamikyaAmountType amountType){
     return amountSelector(amount) <= amountType;
 }
 
@@ -66,8 +66,6 @@ bool isNameValid(const char* name){
     return (num || A_Z || a_z);
 }
 
-
-
 bool isContains(unsigned int id, LinkedList list){
     if(!list){
         return false;
@@ -95,16 +93,15 @@ MatamikyaResult mtmNewProduct(Matamikya matamikya, const unsigned int id, const 
     if(!isNameValid(name)){
         return MATAMIKYA_INVALID_NAME;
     }
-    if(!isAmountConsistene(amount,amountType)){
+    if(!isAmountContains(amount,amountType)){
         return MATAMIKYA_INVALID_AMOUNT;
     }
     LinkedList warehouse = matamikya->warehouse_t;
     ItemData new_product_data = createItemData(name, customData, copyData, freeData, prodPrice, amountType, amount);
     if(!new_product_data){
-        deleteItemData(new_product_data);
         return MATAMIKYA_OUT_OF_MEMORY;
     }
-    bool product_addition_succeed = llAddNode(warehouse, id,new_product_data, deleteItemData);
+    bool product_addition_succeed = llAddNode(warehouse, id, new_product_data, deleteItemData);
     if(!product_addition_succeed){
         deleteItemData(new_product_data);
         return MATAMIKYA_OUT_OF_MEMORY;
@@ -112,23 +109,28 @@ MatamikyaResult mtmNewProduct(Matamikya matamikya, const unsigned int id, const 
     return MATAMIKYA_SUCCESS;
 }
 
-
-
-
 MatamikyaResult mtmChangeProductAmount(Matamikya matamikya, const unsigned int id, const double amount){
     if(!matamikya){
         return MATAMIKYA_NULL_ARGUMENT;
     }
+    
     LinkedList warehouse = matamikya->warehouse_t;
+    if(!isAmountContains(amount,getUnits(getDataById(warehouse,id)))){
+        return MATAMIKYA_INVALID_AMOUNT;
+    }
     ItemData product_data = getDataById(warehouse, id);
     if(!product_data){
         return MATAMIKYA_PRODUCT_NOT_EXIST;
     }
     double new_amount_in_storage = getItemInStorage(product_data) + amount;
+    if(new_amount_in_storage < 0){
+        return MATAMIKYA_INSUFFICIENT_AMOUNT;
+    }
     setItemInStorage(product_data, new_amount_in_storage);
     return MATAMIKYA_SUCCESS;
 }
 
+//TODO Remember to check again later
 MatamikyaResult mtmClearProduct(Matamikya matamikya, const unsigned int id){
     if(!matamikya){
         return MATAMIKYA_NULL_ARGUMENT;
@@ -137,9 +139,10 @@ MatamikyaResult mtmClearProduct(Matamikya matamikya, const unsigned int id){
     LinkedList warehouse = matamikya->warehouse_t;
     if(!isContains(id,warehouse)){
         return MATAMIKYA_PRODUCT_NOT_EXIST;
+    }    
+    LL_FOREACH(unsigned int, it, orders){
+        deleteNodeById(getData(getCurrent(orders)), id);
     }
-    
-    deleteNodeById(orders, id);
     deleteNodeById(warehouse, id);
     return MATAMIKYA_PRODUCT_NOT_EXIST;
 }
@@ -154,15 +157,9 @@ unsigned int mtmCreateNewOrder(Matamikya matamikya){
         return MATAMIKYA_OUT_OF_MEMORY;
     }
     unsigned int new_id = makeNewListNodeId(orders);
-    Node new_order = createNode(new_id, new_cart, deleteLinkedList);
-    if(!new_order){
+    bool add_cart = llAddNode(orders, new_id, new_cart, deleteLinkedList);
+    if(!add_cart){
         deleteLinkedList(new_cart);
-        return MATAMIKYA_OUT_OF_MEMORY;
-    }
-    bool add_node_succeed = llAddNode(orders, new_id, new_cart, deleteCartItem);
-    if(!add_node_succeed){
-        deleteLinkedList(new_cart);
-        deleteNode(new_order, deleteLinkedList);
         return MATAMIKYA_OUT_OF_MEMORY;
     }
     return MATAMIKYA_SUCCESS;
@@ -181,20 +178,20 @@ MatamikyaResult mtmChangeProductAmountInOrder(Matamikya matamikya, const unsigne
     }
     LinkedList orders = matamikya->orders_t;
     LinkedList cart = getDataById(orders, orderId);
-    if(!cart){
+    if(!getDataById(cart,productId)){
         if(amount > 0){
             CartItem new_cart_item = createCartItem(productId, amount);
-            bool add_item_succeed = llAddNode(cart,makeNewListNodeId(cart),new_cart_item,deleteCartItem);
+            bool add_item_succeed = llAddNode(cart, productId, new_cart_item, deleteCartItem);
             if(add_item_succeed){
                 return MATAMIKYA_SUCCESS;
             }
             return MATAMIKYA_OUT_OF_MEMORY;
         }
-        return MATAMIKYA_PRODUCT_NOT_EXIST;
+        return MATAMIKYA_INSUFFICIENT_AMOUNT;
     }
     CartItem product = getDataById(cart, productId);
     double new_amount = getCartItemAmount(product) + amount;
-    if(amount <= 0){
+    if(new_amount <= 0){
         deleteNodeById(cart,productId);
         return MATAMIKYA_SUCCESS;
     }

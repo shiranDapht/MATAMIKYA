@@ -23,19 +23,20 @@ ItemData createItemData(const char* item_name, MtmProductData product_data, MtmC
             if(!item_name || !product_data || !copy_data || !free_data || !product_price){
                     return NULL;
                 }
-            MtmProductData hara = copy_data(product_data);
-            if(!hara){
+            MtmProductData item_data_PD = copy_data(product_data);
+            if(!item_data_PD){
                 return NULL;
             }
             ItemData item_data = (ItemData)malloc(sizeof( struct ItemData_t));
             if(!item_data){
+                free_data(item_data_PD);
                 return NULL;
             }
-            char* new_name = (char*)malloc(sizeof(item_name)+1);
+            char* new_name = (char*)malloc(strlen(item_name)+1);
             strcpy(new_name,item_name);
             item_data->item_name_t = new_name;
             item_data->income_t = 0;
-            bool pd = setProductData(item_data, hara);
+            bool pd = setProductData(item_data, item_data_PD);
             bool cd = setCopyData(item_data, copy_data);
             bool fd = setFreeData(item_data, free_data);
             bool pp = setProductPrice(item_data, product_price);

@@ -57,6 +57,7 @@ void matamikyaDestroy(Matamikya matamikya){
             deleteLinkedList(matamikya->orders_t);
         }
     }
+    free(matamikya);
 }
 
 bool isNameValid(const char* name){
@@ -195,6 +196,7 @@ MatamikyaResult mtmChangeProductAmountInOrder(Matamikya matamikya, const unsigne
             if(add_item_succeed){
                 return MATAMIKYA_SUCCESS;
             }
+            deleteCartItem(new_cart_item);
             return MATAMIKYA_OUT_OF_MEMORY;
         }
         return MATAMIKYA_INSUFFICIENT_AMOUNT;

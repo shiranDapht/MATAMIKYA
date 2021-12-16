@@ -11,8 +11,17 @@ struct CartItem_t{
 
 CartItem createCartItem(unsigned int id, double amount){
     CartItem new_cart_item = (CartItem)malloc(sizeof(struct CartItem_t));
-    setCartItemId(new_cart_item,id);
-    setCartItemAmount(new_cart_item,amount);
+    if(!new_cart_item){
+        return NULL;
+    }
+    if(!setCartItemId(new_cart_item,id)){
+        deleteCartItem(new_cart_item);
+        return NULL;
+    }
+    if(!setCartItemAmount(new_cart_item,amount)){
+        deleteCartItem(new_cart_item);
+        return NULL;
+    }
     return new_cart_item;
 }
 

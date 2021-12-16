@@ -33,9 +33,6 @@ void deleteNode(Node node, deleteNodeDataMethod dm){
     }
 }
 
-
-
-
 unsigned int getId(Node node){
     return node->id_t;
 }
@@ -69,6 +66,9 @@ bool setData(Node node, NodeData data){
 }
 
 Node getNext(Node node){
+    if(!node){
+        return NULL;
+    }
     return node->next_t;
 }
 

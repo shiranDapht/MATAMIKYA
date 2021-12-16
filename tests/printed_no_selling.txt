@@ -1,2 +1,0 @@
-Best Selling Product:
-name: (null), id: 0, total income: 0.000

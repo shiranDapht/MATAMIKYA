@@ -311,7 +311,7 @@ MatamikyaResult mtmPrintBestSelling(Matamikya matamikya, FILE *output){
     bool no_sales = true;
     LL_FOREACH(unsigned int, it, warehouse){
         ItemData current_data = getData(getCurrent(warehouse));
-        if(getProductIncome(current_data) <= 0){
+        if(getProductIncome(current_data) > 0){
             no_sales = false;
             break;
         }

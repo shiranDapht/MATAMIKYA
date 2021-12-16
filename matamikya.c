@@ -22,11 +22,12 @@ MatamikyaAmountType amountSelector(const double amount){
     return MATAMIKYA_INTEGER_AMOUNT;
 }
 
-bool isAmountContains(const double amount, const MatamikyaAmountType amountType){
+bool isAmountContains(const double amount,  MatamikyaAmountType amountType){
     return amountSelector(amount) <= amountType;
 }
 
 Matamikya matamikyaCreate(){
+    //printf("HARA!!!!!!\n");
     Matamikya new_matamikya = (Matamikya)malloc(sizeof(struct Matamikya_t));
     if(!new_matamikya){
         return NULL;
@@ -42,6 +43,8 @@ Matamikya matamikyaCreate(){
         free(new_matamikya);
         return NULL;
     }
+    new_matamikya->warehouse_t = warehouse;
+    new_matamikya->orders_t = orders;
     return new_matamikya;
 }
 
@@ -83,7 +86,7 @@ MatamikyaResult mtmNewProduct(Matamikya matamikya, const unsigned int id, const 
                               const MtmProductData customData, MtmCopyData copyData,
                               MtmFreeData freeData, MtmGetProductPrice prodPrice){
 
-    if(!matamikya  || !name  || !amountType  || !customData  || !copyData  
+    if(!matamikya  || !name  || !customData  || !copyData  
             || !freeData  || !prodPrice){
             return MATAMIKYA_NULL_ARGUMENT;     
     }
@@ -144,7 +147,7 @@ MatamikyaResult mtmClearProduct(Matamikya matamikya, const unsigned int id){
         deleteNodeById(getData(getCurrent(orders)), id);
     }
     deleteNodeById(warehouse, id);
-    return MATAMIKYA_PRODUCT_NOT_EXIST;
+    return MATAMIKYA_SUCCESS;
 }
 
 unsigned int mtmCreateNewOrder(Matamikya matamikya){
@@ -162,7 +165,7 @@ unsigned int mtmCreateNewOrder(Matamikya matamikya){
         deleteLinkedList(new_cart);
         return MATAMIKYA_OUT_OF_MEMORY;
     }
-    return MATAMIKYA_SUCCESS;
+    return new_id;
 }
 
 MatamikyaResult mtmChangeProductAmountInOrder(Matamikya matamikya, const unsigned int orderId,
@@ -173,13 +176,20 @@ MatamikyaResult mtmChangeProductAmountInOrder(Matamikya matamikya, const unsigne
     if(!isContains(orderId, matamikya->orders_t)){
         return MATAMIKYA_ORDER_NOT_EXIST;
     }
+    if(!isContains(productId,matamikya->warehouse_t)){
+        return MATAMIKYA_PRODUCT_NOT_EXIST;
+    }
     if(amount == 0){
         return MATAMIKYA_SUCCESS;
+    }
+    if(!isAmountContains(amount,getUnits(getDataById(matamikya->warehouse_t,productId)))){
+        return MATAMIKYA_INVALID_AMOUNT;
     }
     LinkedList orders = matamikya->orders_t;
     LinkedList cart = getDataById(orders, orderId);
     if(!getDataById(cart,productId)){
         if(amount > 0){
+
             CartItem new_cart_item = createCartItem(productId, amount);
             bool add_item_succeed = llAddNode(cart, productId, new_cart_item, deleteCartItem);
             if(add_item_succeed){
@@ -250,7 +260,7 @@ MatamikyaResult mtmPrintInventory(Matamikya matamikya, FILE *output){
             max_id = it;
         }
     }
-
+    fprintf(output,"Inventory Status:\n");
     for(int i = 0; i <= max_id; i++){
         ItemData product = getDataById(warehouse,i);
         if(product){
@@ -280,11 +290,13 @@ MatamikyaResult mtmPrintOrder(Matamikya matamikya, const unsigned int orderId, F
     double total_price = 0;
     for(int i=0;i<=max_id;i++){
         CartItem product = getDataById(cart, i);
-        ItemData product_in_warehouse = getDataById(matamikya->warehouse_t,i);
-        double amount = getCartItemAmount(product);
-        double price = getProductPrice(product_in_warehouse)(getProductData(product_in_warehouse),amount);
-        mtmPrintProductDetails(getItemName(product_in_warehouse),i,amount,price,output);
-        total_price += price;
+        if(product){
+            ItemData product_in_warehouse = getDataById(matamikya->warehouse_t,i);
+            double amount = getCartItemAmount(product);
+            double price = getProductPrice(product_in_warehouse)(getProductData(product_in_warehouse),amount);
+            mtmPrintProductDetails(getItemName(product_in_warehouse),i,amount,price,output);
+            total_price += price;
+        }
     }
 
     mtmPrintOrderSummary(total_price, output);

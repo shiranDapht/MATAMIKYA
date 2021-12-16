@@ -1,4 +1,3 @@
-#include "matamikya_print.h"
 #include "warehouse_item.h"
 
 #include <stdlib.h>
@@ -21,11 +20,13 @@ struct ItemData_t{
 ItemData createItemData(const char* item_name, MtmProductData product_data, MtmCopyData copy_data,
         MtmFreeData free_data, MtmGetProductPrice product_price,
         MatamikyaAmountType units, double in_storage){
-            if(!item_name || !product_data || !copy_data || !free_data || !product_price 
-                || !units){
+            if(!item_name || !product_data || !copy_data || !free_data || !product_price){
                     return NULL;
                 }
-            
+            MtmProductData hara = copy_data(product_data);
+            if(!hara){
+                return NULL;
+            }
             ItemData item_data = (ItemData)malloc(sizeof( struct ItemData_t));
             if(!item_data){
                 return NULL;
@@ -34,7 +35,7 @@ ItemData createItemData(const char* item_name, MtmProductData product_data, MtmC
             strcpy(new_name,item_name);
             item_data->item_name_t = new_name;
             item_data->income_t = 0;
-            bool pd = setProductData(item_data, product_data);
+            bool pd = setProductData(item_data, hara);
             bool cd = setCopyData(item_data, copy_data);
             bool fd = setFreeData(item_data, free_data);
             bool pp = setProductPrice(item_data, product_price);
@@ -68,7 +69,7 @@ MtmProductData getProductData(ItemData item_data){
     return item_data->product_data_t;
 }
 
-bool setProductData(ItemData item_data, MtmGetProductPrice product_data){
+bool setProductData(ItemData item_data, MtmProductData product_data){
     if(!item_data || !product_data){
         return false;
     }

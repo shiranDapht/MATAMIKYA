@@ -42,7 +42,7 @@ unsigned int getId(Node node){
 
 //privet function
 bool setId(Node node, unsigned int id){
-    if(!node || id <= 0){
+    if(!node || id < 0){
         return false;
     }
     node->id_t = id;
@@ -60,7 +60,7 @@ NodeData getData(Node node){
 }
 
 bool setData(Node node, NodeData data){
-    if(!node || !data){
+    if(!node){
         node->data_t = NULL;
         return false;
     }

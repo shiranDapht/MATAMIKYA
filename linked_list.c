@@ -85,28 +85,28 @@ bool setCurrent(LinkedList list, Node current){
 
 unsigned int llGetFirst(LinkedList list){
     if(!list){
-        return NULL;
+        return 0;
     }
     Node first = getNext(getHead(list));
     if(!first){
-        return NULL;
+        return 0;
     }
     if(!setCurrent(list, first)){
-        return NULL;
+        return 0;
     }
     return getId(first);
 }
 
 unsigned int llGetNext(LinkedList list){
     if(!list){
-        return NULL;
+        return 0;
     }
-    Node next = getCurrent(list);
-    if(!getNext(next)){
-        return NULL;
+    Node next = getNext(getCurrent(list));
+    if(!next){
+        return 0;
     }
     if(!setCurrent(list, next)){
-        return NULL;
+        return 0;
     }
     return getId(next);
 }
@@ -120,12 +120,17 @@ bool llAddNode(LinkedList list, unsigned int id, NodeData data, deleteNodeDataMe
     if(!new_node){
         return false;
     }
-    if(!setNext(getCurrent(list), new_node)){
-        deleteNode(new_node,getDeleteDataMethod(list));
-
-        return false;
+    if(!getNext(getHead(list))){
+        setNext(getHead(list),new_node);
+        return true;
     }
-    return true;
+    LL_FOREACH(unsigned int, it, list){
+        if(!getNext(getCurrent(list))){
+            setNext(getCurrent(list), new_node);
+            return true;
+        }
+    }
+    return false;
 }
 
 unsigned int makeNewListNodeId(LinkedList list){

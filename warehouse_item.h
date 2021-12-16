@@ -44,7 +44,7 @@ MtmProductData getProductData(ItemData item_data);
  * @return true 
  * @return false 
  */
-bool setProductData(ItemData item_data, MtmGetProductPrice product_data);
+bool setProductData(ItemData item_data, MtmProductData product_data);
 
 /**
  * @brief Get the Copy Data object

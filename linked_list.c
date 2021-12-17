@@ -7,7 +7,6 @@
 
 struct LinkedList_t{
     deleteNodeDataMethod deleteData_t;
-    NodeData data;
     Node head_t;
     Node current_t;
 
@@ -15,9 +14,7 @@ struct LinkedList_t{
 
 //private method
 void setDeleteMethod(LinkedList list, deleteNodeDataMethod dm){
-    if(list){
-        list->deleteData_t = dm;
-    }
+    list->deleteData_t = dm;
 }
 
 LinkedList createLinkedList(deleteNodeDataMethod deleteData){
@@ -32,39 +29,22 @@ LinkedList createLinkedList(deleteNodeDataMethod deleteData){
     setDeleteMethod(linked_list,deleteData);
     Node head = createNode(0, NULL, deleteData);
     if(!head){
-
-        deleteNode(head,getDeleteDataMethod(linked_list));
         free(linked_list);
         return NULL;
     }
     linked_list->head_t = head;
-    bool sn = setNext(head, NULL);
-    bool sc = setCurrent(linked_list, getNext(head));
-    if(!sn || !sc){
-        deleteNode(head,getDeleteDataMethod(linked_list));
-        deleteLinkedList(linked_list);
-    }
     return linked_list;
 }
 
 void deleteLinkedList(void* list){
-    if(!list){
-        return;
+    Node node = getNext(getHead(list));
+    while(node){
+        Node to_delete = node;
+        node = getNext(node);
+        deleteNode(to_delete,getDeleteDataMethod(list));
     }
-    if(!getHead(list)){
-        free(list);
-    }
-    /*else if(list){
-        Node current = getNext(getHead(list));
-        while (current){
-            Node to_delete = current;
-            current = getNext(current);
-            deleteNode(to_delete,getDeleteDataMethod(list));
-        }
-    }*/
-    LL_FOREACH(unsigned int, it, list){
-        deleteNodeById(list, it);
-    }
+    free(getHead(list));
+    free(list);
 }
 
 Node getHead(LinkedList list){
@@ -130,6 +110,7 @@ bool llAddNode(LinkedList list, unsigned int id, NodeData data, deleteNodeDataMe
             return true;
         }
     }
+    deleteNode(new_node,deleteData);
     return false;
 }
 
@@ -169,7 +150,7 @@ void deleteNodeById(LinkedList list, unsigned int id){
                 deleteNode(to_delete, getDeleteDataMethod(list));
                 return;
             }
-            previus = getCurrent(list);
+            previus = getNext(previus);
         }
     }
 }

@@ -6,7 +6,6 @@
 
 #include <stdlib.h>
 
-#define MAX_UINT32 0xFFFFFFFF
 struct Matamikya_t{
     LinkedList warehouse_t;
     LinkedList orders_t;
@@ -27,7 +26,6 @@ bool isAmountContains(const double amount,  MatamikyaAmountType amountType){
 }
 
 Matamikya matamikyaCreate(){
-    //printf("HARA!!!!!!\n");
     Matamikya new_matamikya = (Matamikya)malloc(sizeof(struct Matamikya_t));
     if(!new_matamikya){
         return NULL;
@@ -37,7 +35,7 @@ Matamikya matamikyaCreate(){
         free(new_matamikya);
         return NULL;
     }
-    LinkedList orders = createLinkedList(deleteCartItem);
+    LinkedList orders = createLinkedList(deleteLinkedList);
     if(!orders){
         deleteLinkedList(warehouse);
         free(new_matamikya);
@@ -50,13 +48,10 @@ Matamikya matamikyaCreate(){
 
 void matamikyaDestroy(Matamikya matamikya){
     if(matamikya){
-        if(matamikya->warehouse_t){
-            deleteLinkedList(matamikya->warehouse_t);
-        }
-        if(matamikya->orders_t){
-            deleteLinkedList(matamikya->orders_t);
-        }
+        deleteLinkedList(matamikya->warehouse_t);
+        deleteLinkedList(matamikya->orders_t);
     }
+    free(matamikya);
 }
 
 bool isNameValid(const char* name){
@@ -133,7 +128,6 @@ MatamikyaResult mtmChangeProductAmount(Matamikya matamikya, const unsigned int i
     return MATAMIKYA_SUCCESS;
 }
 
-//TODO Remember to check again later
 MatamikyaResult mtmClearProduct(Matamikya matamikya, const unsigned int id){
     if(!matamikya){
         return MATAMIKYA_NULL_ARGUMENT;
@@ -195,6 +189,7 @@ MatamikyaResult mtmChangeProductAmountInOrder(Matamikya matamikya, const unsigne
             if(add_item_succeed){
                 return MATAMIKYA_SUCCESS;
             }
+            deleteCartItem(new_cart_item);
             return MATAMIKYA_OUT_OF_MEMORY;
         }
         return MATAMIKYA_INSUFFICIENT_AMOUNT;
@@ -245,7 +240,9 @@ MatamikyaResult mtmCancelOrder(Matamikya matamikya, const unsigned int orderId){
     if(!isContains(orderId,orders)){
         return MATAMIKYA_ORDER_NOT_EXIST;
     }
-    deleteLinkedList(getDataById(orders, orderId));
+    //LinkedList cart_to_delete = getDataById(orders, orderId);
+    deleteNodeById(orders,orderId);
+    //deleteLinkedList(cart_to_delete);
     return MATAMIKYA_SUCCESS;
 }
 

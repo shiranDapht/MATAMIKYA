@@ -10,6 +10,9 @@ struct Node_t{
 };
 
 Node createNode(unsigned int id, NodeData data, deleteNodeDataMethod deleteData){
+    if(!deleteData){
+        return NULL;
+    }
     Node new_node = (Node)malloc(sizeof(struct Node_t));
     if(!new_node){
         return NULL;
@@ -26,15 +29,12 @@ Node createNode(unsigned int id, NodeData data, deleteNodeDataMethod deleteData)
 
 void deleteNode(Node node, deleteNodeDataMethod dm){
     if(node){
-        if(!getData(node)){
+        if(getData(node)){
             dm(getData(node));
         }
         free(node);
     }
 }
-
-
-
 
 unsigned int getId(Node node){
     return node->id_t;
@@ -42,7 +42,7 @@ unsigned int getId(Node node){
 
 //privet function
 bool setId(Node node, unsigned int id){
-    if(!node || id < 0){
+    if(id < 0){
         return false;
     }
     node->id_t = id;
@@ -61,7 +61,7 @@ NodeData getData(Node node){
 
 bool setData(Node node, NodeData data){
     if(!node){
-        node->data_t = NULL;
+        //node->data_t = NULL;
         return false;
     }
     node->data_t = data;
@@ -69,6 +69,9 @@ bool setData(Node node, NodeData data){
 }
 
 Node getNext(Node node){
+    if(!node){
+        return NULL;
+    }
     return node->next_t;
 }
 

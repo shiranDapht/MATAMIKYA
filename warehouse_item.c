@@ -23,19 +23,20 @@ ItemData createItemData(const char* item_name, MtmProductData product_data, MtmC
             if(!item_name || !product_data || !copy_data || !free_data || !product_price){
                     return NULL;
                 }
-            MtmProductData hara = copy_data(product_data);
-            if(!hara){
+            MtmProductData item_data_PD = copy_data(product_data);
+            if(!item_data_PD){
                 return NULL;
             }
             ItemData item_data = (ItemData)malloc(sizeof( struct ItemData_t));
             if(!item_data){
+                free_data(item_data_PD);
                 return NULL;
             }
-            char* new_name = (char*)malloc(sizeof(item_name)+1);
+            char* new_name = (char*)malloc(strlen(item_name)+1);
             strcpy(new_name,item_name);
             item_data->item_name_t = new_name;
             item_data->income_t = 0;
-            bool pd = setProductData(item_data, hara);
+            bool pd = setProductData(item_data, item_data_PD);
             bool cd = setCopyData(item_data, copy_data);
             bool fd = setFreeData(item_data, free_data);
             bool pp = setProductPrice(item_data, product_price);
@@ -51,16 +52,13 @@ ItemData createItemData(const char* item_name, MtmProductData product_data, MtmC
 }
         
 char* getItemName(ItemData item_data){
-    if(item_data){
-        return item_data->item_name_t;
-    }
-    return NULL;
+    return item_data->item_name_t;
 }
 
 void deleteItemData(void* item_data){
     if(item_data){
-        free(((ItemData)item_data)->item_name_t);
         getFreeData(item_data)(getProductData(item_data));
+        free(((ItemData)item_data)->item_name_t);
         free(item_data);
     }
 }
@@ -70,7 +68,7 @@ MtmProductData getProductData(ItemData item_data){
 }
 
 bool setProductData(ItemData item_data, MtmProductData product_data){
-    if(!item_data || !product_data){
+    if(!product_data){
         return false;
     }
     item_data->product_data_t = product_data;
@@ -82,7 +80,7 @@ MtmCopyData getCopyData(ItemData item_data){
 }
 
 bool setCopyData(ItemData item_data, MtmCopyData copy_data){
-    if(!item_data || !copy_data){
+    if(!copy_data){
         return false;
     }
     item_data->copy_data_t = copy_data;
@@ -94,7 +92,7 @@ MtmFreeData getFreeData(ItemData item_data){
 }
 
 bool setFreeData(ItemData item_data, MtmFreeData free_data){
-    if(!item_data || !free_data){
+    if(!free_data){
         return false;
     }
     item_data->free_data_t = free_data;
@@ -106,7 +104,7 @@ MtmGetProductPrice getProductPrice(ItemData item_data){
 }
 
 bool setProductPrice(ItemData item_data, MtmGetProductPrice product_price){
-    if(!item_data || !product_price){
+    if(!product_price){
         return false;
     }
     item_data->product_price_t = product_price;
@@ -118,9 +116,6 @@ MatamikyaAmountType getUnits(ItemData item_data){
 }
 
 bool setUnits(ItemData item_data, MatamikyaAmountType units){
-    if(!item_data){
-        return false;
-    }
     item_data->units_t = units;
     return true;
 }
@@ -133,9 +128,6 @@ double getItemInStorage(ItemData item_data){
 }
 
 bool setItemInStorage(ItemData item_data, double item_in_storage){
-    if(!item_data){
-        return false;
-    }
     item_data->in_storage_t = item_in_storage;
     return true;
 }

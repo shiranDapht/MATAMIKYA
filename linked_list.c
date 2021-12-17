@@ -7,7 +7,6 @@
 
 struct LinkedList_t{
     deleteNodeDataMethod deleteData_t;
-    NodeData data;
     Node head_t;
     Node current_t;
 
@@ -15,9 +14,7 @@ struct LinkedList_t{
 
 //private method
 void setDeleteMethod(LinkedList list, deleteNodeDataMethod dm){
-    if(list){
-        list->deleteData_t = dm;
-    }
+    list->deleteData_t = dm;
 }
 
 LinkedList createLinkedList(deleteNodeDataMethod deleteData){
@@ -40,18 +37,13 @@ LinkedList createLinkedList(deleteNodeDataMethod deleteData){
 }
 
 void deleteLinkedList(void* list){
-    if(!list){
-        return;
+    Node node = getNext(getHead(list));
+    while(node){
+        Node to_delete = node;
+        node = getNext(node);
+        deleteNode(to_delete,getDeleteDataMethod(list));
     }
-    if(!getHead(list)){
-        free(list);
-    }
-    Node previus = getHead(list);
-    while(previus){
-        Node next = getNext(previus);
-        deleteNode(previus,getDeleteDataMethod(list));
-        previus = next;
-    }
+    free(getHead(list));
     free(list);
 }
 

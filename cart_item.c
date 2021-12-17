@@ -26,9 +26,7 @@ CartItem createCartItem(unsigned int id, double amount){
 }
 
 void deleteCartItem(void* cart_item){
-    if(cart_item){
-        free(cart_item);
-    }
+    free(cart_item);
 }
 
 

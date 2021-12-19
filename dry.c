@@ -2,6 +2,7 @@
 #include <string.h>
 #include <assert.h>
 #include <stdbool.h>
+#include <stdio.h>
 
 // char *stringduplicator(char *s, int times) { (code conventions #1)
 char *stringDuplicator(char *s, int times)
@@ -11,11 +12,13 @@ char *stringDuplicator(char *s, int times)
     {
         return NULL;
     }
-    assert(times > 0); // asuming that times is possitive
-    // int LEN = strlen(*s); (programming error #2 , code conventions #2)
+    assert(times > 0); // assuming that times is positive
+    // int LEN = strlen(*s); (programming error #2 ,code conventions #2)
     int len = strlen(s);
-    // char *out = malloc(len * times); (programming error #3, code conventions #3)
+    // char *out = malloc(len * times); 
+    //(programming error #3, code conventions #3)
     char *duplicated_str = malloc(sizeof(char) * len * times + 1);
+    char* start_of_str = duplicated_str;
     // assert(out); (programming error #4)
     if (!duplicated_str)
     {
@@ -28,7 +31,7 @@ char *stringDuplicator(char *s, int times)
         strcpy(duplicated_str, s);
         duplicated_str += len;
     }
-    return duplicated_str;
+    return start_of_str;
 }
 
 /*
@@ -40,7 +43,6 @@ typedef struct node_t
     int x;
     struct node_t *next;
 } *Node;
-
 typedef enum
 {
     SUCCESS = 0,
@@ -51,8 +53,19 @@ typedef enum
 } ErrorCode;
 
 int getListLength(Node list);
-bool isListSorted(Node list);
-ErrorCode mergeSortedLists(Node list1, Node list2, Node *mergedOut); //convention error #6 :P
+bool isListSorted(Node list){
+    int prev = list->x;
+    while(list->next){
+        if(list->x < prev){
+            return false;
+        }
+        list = list->next;
+        prev = list->x;
+    }
+    return true;
+}
+ErrorCode mergeSortedLists(Node list1, Node list2, Node *mergedOut); 
+//convention error #6 :P
 
 void deleteList(Node list);
 
@@ -81,17 +94,27 @@ ErrorCode mergeSortedLists(Node list1, Node list2, Node *merged_out){
         return UNSORTED_LIST;
     }
 
-    Node list1_ptr = list1, list2_ptr = list2, sorted_list;
-    bool is_first = true;
+    Node list1_ptr = list1, list2_ptr = list2, sorted_list = malloc(sizeof(struct node_t));
+    *merged_out = sorted_list;
+
+    if(list1_ptr->x <= list2_ptr->x){
+        sorted_list->x = list1_ptr->x;
+        list1_ptr = list1_ptr->next;
+    }
+    else{
+        sorted_list->x = list2_ptr->x;
+        list1_ptr = list1_ptr->next;
+    }
 
     while (list1_ptr && list2_ptr)
     {
-        sorted_list = malloc(sizeof(struct node_t));
+        sorted_list->next = malloc(sizeof(struct node_t));
         if(!sorted_list){
-            deleteList(merged_out);
+            deleteList(*merged_out);
             *merged_out = NULL;
             return MEMORY_ERROR;
         }
+        sorted_list = sorted_list->next;
         if(list1_ptr->x <= list2_ptr->x){
             sorted_list->x = list1_ptr->x;
             list1_ptr = list1_ptr->next;
@@ -100,41 +123,64 @@ ErrorCode mergeSortedLists(Node list1, Node list2, Node *merged_out){
             sorted_list->x = list2_ptr->x;
             list2_ptr = list2_ptr->next;
         }
-        sorted_list = sorted_list->next;
-        if(is_first){
-            is_first = false;
-            *merged_out = sorted_list;
-        }
-
     }
 
     while (list1_ptr)
     {
-        sorted_list = malloc(sizeof(struct node_t));
+        sorted_list->next = malloc(sizeof(struct node_t));
         if(!sorted_list){
-            deleteList(merged_out);
+            deleteList(*merged_out);
             *merged_out = NULL;
             return MEMORY_ERROR;
         }
+        sorted_list = sorted_list->next;
         sorted_list->x = list1_ptr->x;
         list1_ptr = list1_ptr->next;
-        sorted_list = sorted_list->next;
     }
     
     while (list2_ptr)
     {
-        sorted_list = malloc(sizeof(struct node_t));
+        sorted_list->next = malloc(sizeof(struct node_t));
         if(!sorted_list){
-            deleteList(merged_out);
+            deleteList(*merged_out);
             *merged_out = NULL;
             return MEMORY_ERROR;
         }
+        sorted_list = sorted_list->next;
         sorted_list->x = list2_ptr->x;
         list2_ptr = list2_ptr->next;
-        sorted_list = sorted_list->next;
     }    
 
     return SUCCESS;
-    
 
+}
+
+int main(){
+    Node list1 = malloc(sizeof(struct node_t));
+    Node first1 = list1;
+    Node list2 = malloc(sizeof(struct node_t));
+    Node first2 = list2;
+
+    for (int i = 0; i < 5; i++){
+        list1->x = i;
+        list2->x = i+1;
+        if(i!=4){
+            list1->next = malloc(sizeof(struct node_t));
+            list2->next = malloc(sizeof(struct node_t));
+            list1 = list1->next;
+            list2 = list2->next;
+        }
+    }
+
+    Node sorted;
+    mergeSortedLists(first1,first2,&sorted);
+    if(!isListSorted(sorted)){
+        return 1;
+    }
+
+    char* s = "hello";
+    char* g = stringDuplicator(s,3);
+    printf("%s\n",g);
+
+    return 0;
 }

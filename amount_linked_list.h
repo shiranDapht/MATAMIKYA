@@ -1,7 +1,7 @@
-#ifndef LINKED_LIST_H_
-#define LINKED_LIST_H_
+#ifndef _MATAMIKYA_LINKED_LIST_H_
+#define _MATAMIKYA_LINKED_LIST_H_
 
-#include "generic_node.h"
+#include "matamikya_generic_node.h"
 
 
 typedef struct LinkedList_t* LinkedList;

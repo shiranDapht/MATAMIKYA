@@ -7,9 +7,12 @@
         "string_view": "c",
         "stdio.h": "c",
         "amount_set_str.c": "cpp",
-        "warehouse_item.h": "c",
-        "linked_list.h": "c",
-        "cart_item.h": "c",
-        "stdlib.h": "c"
+        "matamikya_warehouse_item.h": "c",
+        "matamikya_linked_list.h": "c",
+        "matamikya_cart_item.h": "c",
+        "stdlib.h": "c",
+        "amount_set_str.h": "c",
+        "amount_set_str_node_set.h": "c",
+        "amuont_set_str_tests.h": "c"
     }
 }

@@ -1,5 +1,5 @@
 #include "amount_set_str.h"
-#include "node_set.h"
+#include "amount_set_str_node_set.h"
 
 AmountSet asCreate()
 {

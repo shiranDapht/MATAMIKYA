@@ -1,5 +1,5 @@
-#ifndef CART_ITEM_H_
-#define CART_ITEM_H_
+#ifndef _MATAMIKYA_CART_ITEM_H_
+#define _MATAMIKYA_CART_ITEM_H_
 #include <stdbool.h>
 typedef struct CartItem_t* CartItem;
 

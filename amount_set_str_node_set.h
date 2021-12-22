@@ -1,5 +1,5 @@
-#ifndef _NODE_SET_H_
-#define _NODE_SET_H_
+#ifndef _AMOUNT_SET_STR_NODE_SET_H_
+#define _AMOUNT_SET_STR_NODE_SET_H_
 
 #include "amount_set_str.h"
 

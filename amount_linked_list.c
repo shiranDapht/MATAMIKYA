@@ -1,5 +1,5 @@
-#include "linked_list.h"
-#include "generic_node.h"
+#include "matamikya_linked_list.h"
+#include "matamikya_generic_node.h"
 
 #include <stdbool.h>
 #include <stdlib.h>

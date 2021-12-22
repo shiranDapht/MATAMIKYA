@@ -1,6 +1,6 @@
 #include "amuont_set_str_tests.h"
 #include "../amount_set_str.h"
-#include "../node_set.h"
+#include "../amount_set_str_node_set.h"
 
 int main(){
     //Geting array of sets

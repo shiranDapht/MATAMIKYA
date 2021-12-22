@@ -1,5 +1,5 @@
-#ifndef WAREHOUSE_ITEM_H_
-#define WAREHOUSE_ITEM_H_
+#ifndef _MATAMIKYA_WAREHOUSE_ITEM_H_
+#define _MATAMIKYA_WAREHOUSE_ITEM_H_
 
 #include "matamikya.h"
 

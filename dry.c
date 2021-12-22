@@ -5,8 +5,10 @@
  * @brief dry part of HW1 
  */
 
+
+/*-------------------------------------------------------2.1----------------------------------------------------------*/
+
 /**
- *2.1.1 - stringDuplicator
  * The line corrected is commented above the correct line.  
  * You can see the error type (convention/logic) and error number
  * at the end of the corrected line in "()".
@@ -17,11 +19,9 @@
 #include <assert.h>
 
 // char *stringduplicator(char *s, int times) { (code conventions #1)
-char *stringDuplicator(char *s, int times)
-{
+char *stringDuplicator(char *s, int times){
     // assert(!s); (programming error #1)
-    if (!s)
-    {
+    if (!s){
         return NULL;
     }
     assert(times > 0); // assuming that times is positive
@@ -32,12 +32,10 @@ char *stringDuplicator(char *s, int times)
     char *duplicated_str = malloc(sizeof(char) * len * times + 1);
     char* start_of_str = duplicated_str;
     // assert(out); (programming error #4)
-    if (!duplicated_str)
-    {
+    if (!duplicated_str){
         return NULL;
     }
-    for (int i = 0; i < times; i++)
-    {
+    for (int i = 0; i < times; i++){
     // out = out + len;
     // strcpy(out, s); (programming error #5, code conventions #4)
         strcpy(duplicated_str, s);
@@ -47,20 +45,16 @@ char *stringDuplicator(char *s, int times)
 }
 
 
+/*-------------------------------------------------------2.2----------------------------------------------------------*/
 
-/*
-2.2
-*/
 #include <stdbool.h>
 #include <stdio.h>
 
-typedef struct node_t
-{
+typedef struct node_t{
     int x;
     struct node_t *next;
 } *Node;
-typedef enum
-{
+typedef enum{
     SUCCESS = 0,
     MEMORY_ERROR,
     EMPTY_LIST,
@@ -68,18 +62,6 @@ typedef enum
     NULL_ARGUMENT,
 } ErrorCode;
 
-int getListLength(Node list);
-bool isListSorted(Node list){
-    int prev = list->x;
-    while(list->next){
-        if(list->x < prev){
-            return false;
-        }
-        list = list->next;
-        prev = list->x;
-    }
-    return true;
-}
 /**
  * function needed to be added to compleate the mergeSortedLists function
  */
@@ -138,11 +120,12 @@ void assignMax(Node *list1_ptr, Node *list2_ptr, Node sorted_list){
     }
 }
 
+int getListLength(Node list);
+bool isListSorted(Node list);
+//ErrorCode mergeSortedLists(Node list1, Node list2, Node *mergedOut); (convention error #6 :P)
+ErrorCode mergeSortedLists(Node list1, Node list2, Node *merged_out);
+
 //implementation of mergeSortedLists 
-
-ErrorCode mergeSortedLists(Node list1, Node list2, Node *mergedOut); 
-//convention error #6 :P
-
 ErrorCode mergeSortedLists(Node list1, Node list2, Node *merged_out){
     if(!merged_out){
         return NULL_ARGUMENT;

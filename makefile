@@ -2,7 +2,7 @@ CC= gcc
 CFLAGS= -std=c99 -Wall -pedantic-errors -Werror -DNDEBUG
 OBJS_MATAM= matamikya.o cart_item.o generic_node.o linked_list.o\
 matamikya_print.o warehouse_item.o tests/matamikya_main.o tests/matamikya_tests.o
-OBJS_STR= amount_set_str.o amount_set_str_node_set.o our_tests/amuont_set_str_test.o our_tests/amount_set_main.o
+OBJS_STR= amount_set_str.o amount_set_str_node_set.o ./amuont_set_str_test.o ./amount_set_main.o
 DEBUG_FLAGS= -g
 EXTRA= -L. -lmtm -lm -las
 
@@ -21,16 +21,17 @@ tests/matamikya_tests.o: tests/matamikya_tests.c tests/matamikya_tests.h \
  tests/../matamikya.h tests/test_utilities.h
 
 amount_set_str : $(OBJS_STR)
-	$(CC) $(CFLAGS) $(OBJS_STR) -o $@
+	$(CC) $(CFLAGS) $(OBJS_STR) -o $@ ; ./amount_set_str < ./amount_set_str_input0.txt > amount_set_str_output0.txt \
+	; diff amount_set_str_expectedOutput0.txt amount_set_str_output0.txt
 
 amount_set_str.o: amount_set_str.c amount_set_str.h amount_set_str_node_set.h
 amount_set_str_node_set.o: amount_set_str_node_set.c amount_set_str_node_set.h amount_set_str.h
-our_tests/amount_set_main.o: our_tests/amount_set_main.c \
- our_tests/amuont_set_str_tests.h our_tests/../amount_set_str.h \
- our_tests/../amount_set_str_node_set.h our_tests/../amount_set_str.h
-our_tests/amuont_set_str_test.o: our_tests/amuont_set_str_test.c \
- our_tests/amuont_set_str_tests.h our_tests/../amount_set_str.h \
- our_tests/../amount_set_str_node_set.h our_tests/../amount_set_str.h
+./amount_set_main.o: ./amount_set_main.c \
+ ./amuont_set_str_tests.h ./amount_set_str.h \
+ ./amount_set_str_node_set.h ./amount_set_str.h
+./amuont_set_str_test.o: ./amuont_set_str_test.c \
+ ./amuont_set_str_tests.h ./amount_set_str.h \
+ ./amount_set_str_node_set.h ./amount_set_str.h
 
 clean:
-	rm -f tests/*.o *.o matamikya amount_set_str tests/printed* our_tests/*.o our_tests/main_str_set_amount
+	rm -f tests/*.o *.o matamikya amount_set_str tests/printed* ./*.o ./main_str_set_amount ./amount_set_str_output0.txt
